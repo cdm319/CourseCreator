@@ -1,0 +1,64 @@
+/*
+ *  common.less
+ *  Chris Matthews <chrismatthews@outlook.com>
+ *  24/02/2014
+ *
+ *  Contains common base styling for the CourseCreator web application.
+ *
+ */
+
+
+@orange: #e67e22;
+@darkorange: #d35400;
+@purple: lighten(#3D0277, 20%);
+@darkpurple: lighten(#3D0277, 10%);
+@navy: #34495e;
+@darknavy: #2c3e50;
+
+@lato: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
+@opensans: 'Open Sans', Helvetica, Arial, sans-serif;
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,700);
+@import url(http://fonts.googleapis.com/css?family=Lato:100,300,400,700);
+
+html, body {
+	margin: 0;
+	padding: 0;
+	background: #fafafa;
+	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+	font-weight: 400;
+	color: #333;
+}
+
+.clear {
+	clear:both;
+}
+
+h1, h2, h3, h4 {
+	font-family: @lato;
+}
+
+h1 {
+	font-weight: 100;
+}
+
+h2, h3, h4 {
+	font-weight: 300;
+}
+
+p {
+	font-family: @opensans;
+	color: #333;
+}
+
+a {
+	text-decoration: none;
+	color: @orange;
+	border-bottom: 1px dotted;
+}
+a:hover {
+	color: #333;
+}
+a.img-link {
+	border: 0;
+}

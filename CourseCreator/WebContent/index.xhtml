@@ -1,13 +1,68 @@
 <!DOCTYPE html>
-<html	xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:jsf="http://xmlns.jcp.org/jsf">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:jsf="http://xmlns.jcp.org/jsf">
 	<head jsf:id="head">
+		<meta charset="utf-8"/>
+		<meta name="description" content="CourseCreator allows you to create multi-platform MOOC content from Microsoft PowerPoint presentations."/>
+		
 		<title>Test JSF</title>
+
+        <link rel="stylesheet" jsf:name="css/splash.css"></link>
+
+        <!--[if lt IE 9]>
+            <script jsf:name="js/html5shiv.js"></script>
+        <![endif]-->
+        
+        <script jsf:name="js/jquery.min.js"></script>
+        <script>window.jQuery || alert("No jQuery loaded.");</script>
 	</head>
 	<body jsf:id="body">
-		<h1>Test JSF 2.2</h1>
-		<form jsf:id="form">
-			<input type="text" jsf:id="txtName" placeholder="Enter your name..." jsf:value="#{testBean.name}"/>
-		</form>
+		<!--[if lt IE 9]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+        <header>
+        	<div class="hero wrap">
+        		<img class="logo" jsf:name="img/logo_white.png" alt="CourseCreator" width="200px" height="auto"/>
+	        	<h1 class="logo">CourseCreator</h1>
+	        	<!--<hr class="header-rule"/>-->
+	        	<p>
+	        		CourseCreator allows you to create multi-platform MOOC content, either from Microsoft PowerPoint presentations or through the use of an easy to use online interface.
+	        	</p>
+			</div>
+        </header>
+
+        <section class="main wrap">
+        	<div class="start-container">
+        		<div class="start-box pptx" onclick="window.location='courseImport.html'">
+	        		<div class="start-icon"> 
+	        		</div>
+	        		<p class="start-description">
+	        			Import PowerPoint Presentation
+	        		</p>
+	        		<div class="or">
+	        			OR
+	        		</div>
+        		</div>
+        		<div class="start-box blank" onclick="window.location='courseCreateFromScratch.html'">
+        			<div class="start-icon"> 
+	        		</div>
+	        		<p class="start-description">
+						Start from Scratch
+	        		</p>
+        		</div>
+        	</div>
+        	<div class="clear"></div>
+        </section>
+
+        <footer>
+        	<div class="wrap">
+	        	<p style="float: left;">
+	        		Copyright &#169; 2014 Chris Matthews.  All rights reserved.
+	        	</p>
+	        	<p style="float: right">
+		        	Compatible with <a href="https://code.google.com/p/course-builder/">Google Course Builder</a>.
+	        	</p>
+	        	<div class="clear"></div>
+			</div>
+        </footer>
 	</body>
 </html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:ui="http://java.sun.com/jsf/facelets">
+	<head jsf:id="head">
+		<meta charset="utf-8"/>
+		<meta name="description" content="CourseCreator allows you to create multi-platform MOOC content from Microsoft PowerPoint presentations."/>
+        
+        <title><ui:insert name="title">CourseCreator</ui:insert></title>
+
+        <link rel="stylesheet" jsf:name="css/app.css"/>
+
+        <!--[if lt IE 9]>
+            <script jsf:name="js/html5shiv.js"></script>
+        <![endif]-->
+        
+        <script jsf:name="js/jquery.min.js"></script>
+        <script>window.jQuery || alert("No jQuery loaded.");</script>
+        <ui:insert name="extraJs"></ui:insert>
+	</head>
+	<body jsf:id="body">
+		<!--[if lt IE 9]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <section class="sidebar">
+        	<div class="logoBox">
+        		<h1 class="logo">CourseCreator</h1>
+        	</div>
+        	<nav class="menu">
+        		<ul>
+        			<ui:insert name="nav">
+        				
+        			</ui:insert>
+        		</ul>
+        	</nav>
+        	<div class="sidebar-footer">
+        		Copyright &#169; 2014 Chris Matthews.<br/>All rights reserved.
+        	</div>
+        </section>
+        
+		<div class="mainWrap">
+	        <section class="main">
+	        	<h1><ui:insert name="pageTitle"></ui:insert></h1>
+	        	<ui:insert name="content"></ui:insert>
+	        </section>
+		</div>
+	</body>
+</html>

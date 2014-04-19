@@ -12,6 +12,10 @@ public class TestBean {
 		this.emailAddress = "chrismatthews@outlook.com";
 	}
 	
+	public String testForm() {
+		return null;
+	}
+	
 	public String getName() {
 		return name;
 	}

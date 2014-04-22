@@ -28,13 +28,13 @@
         			
         			<label jsf:for="txtAdministratorName">
         				<span>Administrator Name</span>
-        				<input type="text" jsf:id="txtAdministratorName"  placeholder="e.g. Joe Bloggs" jsf:validator="#{courseAction.validateAdministratorName}" jsf:value="#{courseAction.courseStructure.administratorName}"/>
+        				<input type="text" jsf:id="txtAdministratorName"  placeholder="e.g. Joe Bloggs" jsf:validator="#{courseAction.validateAdminName}" jsf:value="#{courseAction.courseStructure.administratorName}"/>
         				<h:message for="txtAdministratorName" styleClass="alert-error"/>
         			</label>
         			
         			<label jsf:for="txtAdministratorEmail">
         				<span>Administrator Email</span>
-        				<input type="email" jsf:id="txtAdministratorEmail" placeholder="e.g. joe.bloggs@email.com"/>
+        				<input type="email" jsf:id="txtAdministratorEmail" placeholder="e.g. joe.bloggs@email.com" jsf:validator="#{courseAction.validateAdminEmail}"/>
         				<h:message for="txtAdministratorEmail" styleClass="alert-error"/>
         			</label>
         		</fieldset>

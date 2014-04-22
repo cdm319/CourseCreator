@@ -1,5 +1,9 @@
 package uk.ac.lboro.coursecreator;
 
+import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -17,7 +21,7 @@ import uk.ac.lboro.coursecreator.model.Course;
  */
 @ManagedBean
 @SessionScoped
-public class CourseAction {
+public class CourseAction implements Serializable {
 	private Course courseStructure;
 	
 	/**
@@ -30,12 +34,13 @@ public class CourseAction {
 	}
 	
 	/**
+	 * Validates the Administrator Name field on the front end.
 	 * 
 	 * @param context			The FacesContext object.
 	 * @param component			The UI Component related to the Validator.
 	 * @param convertedValue	The value currently set on the front end.
 	 */
-	public void validateAdministratorName(FacesContext context, UIComponent component, Object convertedValue) {
+	public void validateAdminName(FacesContext context, UIComponent component, Object convertedValue) {
 		String adminName = convertedValue.toString();
 		
 		if (adminName.matches(".*[0-9].*")) {
@@ -49,6 +54,25 @@ public class CourseAction {
 		if (adminName.length() < 3) {
 			//too short
 			throw new ValidatorException(new FacesMessage("This name is too short."));
+		}
+	}
+	
+	/**
+	 * Validates the Administrator Email field on the front end.
+	 * 
+	 * @param context
+	 * @param component
+	 * @param convertedValue
+	 */
+	public void validateAdminEmail(FacesContext context, UIComponent component, Object convertedValue) {
+		String adminEmail = convertedValue.toString();
+		
+		Pattern emailRegex = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+		Matcher emailMatch = emailRegex.matcher(adminEmail);
+		
+		if (!emailMatch.find()) {
+			//email not valid
+			throw new ValidatorException(new FacesMessage("Please enter a valid email address."));
 		}
 	}
 	

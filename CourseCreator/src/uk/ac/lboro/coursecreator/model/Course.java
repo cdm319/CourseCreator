@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Course model bean.
  * 
@@ -16,7 +18,9 @@ public class Course {
 	private Date startDate;
 	private String forumURL;
 	
+	@NotNull(message="Please enter the Institution Name.")
 	private String institutionName;
+	
 	private String institutionURL;
 	private String institutionLogo;
 	

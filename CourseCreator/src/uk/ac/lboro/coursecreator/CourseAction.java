@@ -60,9 +60,9 @@ public class CourseAction implements Serializable {
 	/**
 	 * Validates the Administrator Email field on the front end.
 	 * 
-	 * @param context
-	 * @param component
-	 * @param convertedValue
+	 * @param context			The FacesContext object.
+	 * @param component			The UI Component related to the Validator.
+	 * @param convertedValue	The value currently set on the front end.
 	 */
 	public void validateAdminEmail(FacesContext context, UIComponent component, Object convertedValue) {
 		String adminEmail = convertedValue.toString();

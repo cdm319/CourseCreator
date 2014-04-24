@@ -1,6 +1,9 @@
 package uk.ac.lboro.coursecreator;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,6 +13,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.servlet.http.Part;
 
 import uk.ac.lboro.coursecreator.model.Course;
 
@@ -22,7 +26,17 @@ import uk.ac.lboro.coursecreator.model.Course;
 @ManagedBean
 @SessionScoped
 public class CourseAction implements Serializable {
+	//default serial UID
+	private static final long serialVersionUID = 1L;
+	
+	//the Course model bean
 	private Course courseStructure;
+	
+	//temporary course details
+	private Part tempLogoImage;
+	private String tempDate;
+	private String tempIntroVid;
+	
 	
 	/**
 	 * Constructor creates new Course model object.
@@ -30,49 +44,6 @@ public class CourseAction implements Serializable {
 	public CourseAction() {
 		if(courseStructure == null) {
 			courseStructure = new Course();
-		}
-	}
-	
-	/**
-	 * Validates the Administrator Name field on the front end.
-	 * 
-	 * @param context			The FacesContext object.
-	 * @param component			The UI Component related to the Validator.
-	 * @param convertedValue	The value currently set on the front end.
-	 */
-	public void validateAdminName(FacesContext context, UIComponent component, Object convertedValue) {
-		String adminName = convertedValue.toString();
-		
-		if (adminName.matches(".*[0-9].*")) {
-			//not a valid name
-			throw new ValidatorException(new FacesMessage("Please enter a valid name."));
-		}
-		if (adminName.length() > 80) {
-			//too long
-			throw new ValidatorException(new FacesMessage("This name is too long."));
-		}
-		if (adminName.length() < 3) {
-			//too short
-			throw new ValidatorException(new FacesMessage("This name is too short."));
-		}
-	}
-	
-	/**
-	 * Validates the Administrator Email field on the front end.
-	 * 
-	 * @param context			The FacesContext object.
-	 * @param component			The UI Component related to the Validator.
-	 * @param convertedValue	The value currently set on the front end.
-	 */
-	public void validateAdminEmail(FacesContext context, UIComponent component, Object convertedValue) {
-		String adminEmail = convertedValue.toString();
-		
-		Pattern emailRegex = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-		Matcher emailMatch = emailRegex.matcher(adminEmail);
-		
-		if (!emailMatch.find()) {
-			//email not valid
-			throw new ValidatorException(new FacesMessage("Please enter a valid email address."));
 		}
 	}
 	
@@ -85,6 +56,7 @@ public class CourseAction implements Serializable {
 		return "index";
 	}
 
+	
 	//Getters and setters
 	public Course getCourseStructure() {
 		return courseStructure;
@@ -92,5 +64,29 @@ public class CourseAction implements Serializable {
 
 	public void setCourseStructure(Course courseStructure) {
 		this.courseStructure = courseStructure;
+	}
+
+	public Part getTempLogoImage() {
+		return tempLogoImage;
+	}
+
+	public void setTempLogoImage(Part logoImage) {
+		this.tempLogoImage = logoImage;
+	}
+
+	public String getTempDate() {
+		return tempDate;
+	}
+
+	public void setTempDate(String tempDate) {
+		this.tempDate = tempDate;
+	}
+
+	public String getTempIntroVid() {
+		return tempIntroVid;
+	}
+
+	public void setTempIntroVid(String tempIntroVid) {
+		this.tempIntroVid = tempIntroVid;
 	}
 }

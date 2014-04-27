@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 
 /**
  * Course model bean.
@@ -12,21 +16,51 @@ import javax.validation.constraints.NotNull;
  * @author Chris Matthews <C.Matthews2-09@student.lboro.ac.uk>
  */
 public class Course {
+	//Course Title, can't be blank, must be between 3 and 80 characters
+	@NotEmpty(message="Please enter the Course Title.")
+	@Size(min=3, max=80, message="Please enter between 3 and 80 characters.")
 	private String title;
+	
+	//Course Blurb, can't be blank, must be between 20 and 300 characters
+	@NotEmpty(message="Please enter the Course Blurb.")
+	@Size(min=20, max=300, message="Please enter between 20 and 300 characters.")
 	private String blurb;
+	
+	//Course Introductory YouTube Video ID, optional
 	private String introVideoId;
+	
+	//Course Start Date, can't be blank
+	@NotEmpty(message="Please enter the Course Start Date.")
 	private Date startDate;
+	
+	//Course Forum URL, optional, but must be a valid URL
+	@URL(message="Please enter a valid URL.")
 	private String forumURL;
 	
-	@NotNull(message="Please enter the Institution Name.")
+	//Institution name, can't be blank, must be between 3 and 80 characters
+	@NotEmpty(message="Please enter the Institution Name.")
+	@Size(min=3, max=80, message="Please enter between 3 and 80 characters.")
 	private String institutionName;
 	
+	//Institution URL, can't be blank, must be a valid URL
+	@NotEmpty(message="Please enter the Institution's web address.")
+	@URL(message="Please enter a valid URL.")
 	private String institutionURL;
+	
+	//Institution Logo, optional, Base64 encoded image
 	private String institutionLogo;
 	
+	//Administrator's Name, can't be blank, must be between 3 and 80 characters
+	@NotEmpty(message="Please enter the Administrator's name.")
+	@Size(min=3, max=80, message="Please enter between 3 and 80 characters.")
 	private String administratorName;
+	
+	//Administrator's Email Address, can't be blank, must be a valid email address
+	@NotEmpty(message="Please enter the Administrator's email address.")
+	@Email(message="Please enter a valid email address.")
 	private String administratorEmail;
 	
+	//List of units within course
 	private List<Unit> units;
 
 	//Basic constructor method

@@ -18,88 +18,22 @@ import javax.servlet.http.Part;
 @NoneScoped
 public class Validation {
 	//constant regex patterns for validation
-	private static final Pattern URL_REGEX = Pattern.compile("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?\\+\\%/\\.\\w]+)?");
-	private static final Pattern EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 	private static final Pattern YOUTUBE_REGEX = Pattern.compile("^(?:https?:\\/\\/)?(?:www\\.)?(?:youtu\\.be\\/|youtube\\.com\\/(?:embed\\/|v\\/|watch\\?v=|watch\\?.+&v=))((\\w|-){11})(?:\\S+)?$");
 	
 	
 	/**
-	 * Validates the Administrator Name field on the front end.
+	 * Validates any alphabetical only field on the front end.
 	 * 
 	 * @param context			The FacesContext object.
 	 * @param component			The UI Component related to the Validator.
 	 * @param convertedValue	The value currently set on the front end.
 	 */
-	public void validateAdminName(FacesContext context, UIComponent component, Object convertedValue) {
-		String adminName = convertedValue.toString();
+	public void validateTextOnly(FacesContext context, UIComponent component, Object convertedValue) {
+		String text = convertedValue.toString();
 		
-		if (adminName.matches(".*[0-9].*")) {
-			//not a valid name
-			throw new ValidatorException(new FacesMessage("Please enter a valid name."));
-		}
-		if (adminName.length() > 80) {
-			//too long
-			throw new ValidatorException(new FacesMessage("Please enter a shorter name."));
-		}
-		if (adminName.length() < 3) {
-			//too short
-			throw new ValidatorException(new FacesMessage("Please enter a longer name."));
-		}
-	}
-	
-	/**
-	 * Validates the Administrator Email field on the front end.
-	 * 
-	 * @param context			The FacesContext object.
-	 * @param component			The UI Component related to the Validator.
-	 * @param convertedValue	The value currently set on the front end.
-	 */
-	public void validateAdminEmail(FacesContext context, UIComponent component, Object convertedValue) {
-		String adminEmail = convertedValue.toString();
-		
-		Matcher emailMatch = EMAIL_REGEX.matcher(adminEmail);
-		
-		if (!emailMatch.find()) {
-			//email not valid
-			throw new ValidatorException(new FacesMessage("Please enter a valid email address."));
-		}
-	}
-	
-	/**
-	 * Validates the Institution Name field on the front end.
-	 *
-	 * @param context			The FacesContext object.
-	 * @param component			The UI Component related to the Validator.
-	 * @param convertedValue	The value currently set on the front end.
-	 */
-	public void validateInstitutionName(FacesContext context, UIComponent component, Object convertedValue) {
-		String institutionName = convertedValue.toString();
-		
-		if (institutionName.length() < 3) {
-			//too short
-			throw new ValidatorException(new FacesMessage("Please enter a longer name."));
-		}
-		if (institutionName.length() > 80) {
-			//too long
-			throw new ValidatorException(new FacesMessage("Please enter a shorter name."));
-		}
-	}
-	
-	/**
-	 * Validates the Institution URL field on the front end.
-	 * 
-	 * @param context			The FacesContext object.
-	 * @param component			The UI Component related to the Validator.
-	 * @param convertedValue	The value currently set on the front end.
-	 */
-	public void validateInstitutionURL(FacesContext context, UIComponent component, Object convertedValue) {
-		String institutionURL = convertedValue.toString();
-		
-		Matcher urlMatch = URL_REGEX.matcher(institutionURL);
-		
-		if (!urlMatch.find()) {
-			//URL not valid
-			throw new ValidatorException(new FacesMessage("Please enter a valid URL."));
+		if (text.matches(".*[0-9].*")) {
+			//string contains numbers
+			throw new ValidatorException(new FacesMessage("Please do not enter numbers."));
 		}
 	}
 	
@@ -118,6 +52,7 @@ public class Validation {
 		fileTypes.add("image/png");
 		fileTypes.add("image/x-png");
 		
+		//field is optional, so only validate if it isn't blank
 		if (tempLogo != null) {
 			if (tempLogo.getSize() < 2) {
 				//smaller than 2 bytes
@@ -135,60 +70,15 @@ public class Validation {
 	}
 	
 	/**
-	 * Validates the Course Title field on the front end.
+	 * Validates any date field on the front end in UK date format.
 	 *
 	 * @param context			The FacesContext object.
 	 * @param component			The UI Component related to the Validator.
 	 * @param convertedValue	The value currently set on the front end.
 	 */
-	public void validateCourseTitle(FacesContext context, UIComponent component, Object convertedValue) {
-		String title = convertedValue.toString();
-		
-		if (title.length() < 3) {
-			//too short
-			throw new ValidatorException(new FacesMessage("Please enter a longer title."));
-		}
-		if (title.length() > 80) {
-			//too long
-			throw new ValidatorException(new FacesMessage("Please enter a shorter title."));
-		}
-	}
-	
-	/**
-	 * Validates the Course Blurb field on the front end.
-	 *
-	 * @param context			The FacesContext object.
-	 * @param component			The UI Component related to the Validator.
-	 * @param convertedValue	The value currently set on the front end.
-	 */
-	public void validateCourseBlurb(FacesContext context, UIComponent component, Object convertedValue) {
-		String blurb = convertedValue.toString();
-		
-		if (blurb.length() < 20) {
-			//too short
-			throw new ValidatorException(new FacesMessage("Please enter a longer blurb."));
-		}
-		if (blurb.length() > 300) {
-			//too long
-			throw new ValidatorException(new FacesMessage("Please enter a shorter blurb."));
-		}
-	}
-	
-	/**
-	 * Validates the Course Start Date field on the front end.
-	 *
-	 * @param context			The FacesContext object.
-	 * @param component			The UI Component related to the Validator.
-	 * @param convertedValue	The value currently set on the front end.
-	 */
-	public void validateCourseStartDate(FacesContext context, UIComponent component, Object convertedValue) {
+	public void validateDate(FacesContext context, UIComponent component, Object convertedValue) {
 		String stringDate = convertedValue.toString();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		
-		if (stringDate == null || "".equals(stringDate)) {
-			//required field
-			throw new ValidatorException(new FacesMessage("Please enter the Course Start Date."));
-		}
 		
 		try {
 			dateFormat.parse(stringDate);
@@ -210,33 +100,25 @@ public class Validation {
 		
 		//field is optional, so only validate if it isn't blank
 		if (videoURL != null && !"".equals(videoURL)) {
-			Matcher ytMatch = YOUTUBE_REGEX.matcher(videoURL);
-			
-			if (!ytMatch.find()) {
-				//YouTube URL not valid
-				throw new ValidatorException(new FacesMessage("Please enter a valid YouTube URL."));
-			}
+			validateYouTubeURL(context, component, convertedValue);
 		}
 	}
 	
 	/**
-	 * Validates the Course Forum URL field on the front end.
+	 * Validates any YouTube video URL field on the front end.
 	 *
 	 * @param context			The FacesContext object.
 	 * @param component			The UI Component related to the Validator.
 	 * @param convertedValue	The value currently set on the front end.
 	 */
-	public void validateCourseForumURL(FacesContext context, UIComponent component, Object convertedValue) {
-		String forumURL = convertedValue.toString();
+	public void validateYouTubeURL(FacesContext context, UIComponent component, Object convertedValue) {
+		String videoURL = convertedValue.toString();
 		
-		//field is optional, so only validate if it isn't blank
-		if(forumURL != null && !"".equals(forumURL)) {
-			Matcher urlMatch = URL_REGEX.matcher(forumURL);
-			
-			if (!urlMatch.find()) {
-				//URL not valid
-				throw new ValidatorException(new FacesMessage("Please enter a valid URL."));
-			}
+		Matcher ytMatch = YOUTUBE_REGEX.matcher(videoURL);
+		
+		if (!ytMatch.find()) {
+			//YouTube URL not valid
+			throw new ValidatorException(new FacesMessage("Please enter a valid YouTube URL."));
 		}
 	}
 }

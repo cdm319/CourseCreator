@@ -21,6 +21,17 @@ public class Lesson {
 		this.lessonObjectives = "";
 	}
 	
+	/**
+	 * Utility method to return a shorter version of the lesson notes for
+	 * displaying on the front end.
+	 * 
+	 * @return	truncated lesson notes
+	 */
+	public String getShortLessonNotes() {
+		String notes = lessonNotes;
+		return notes.substring(0, 116) + "...";
+	}
+	
 	//Getters and setters
 	public int getLessonId() {
 		return lessonId;

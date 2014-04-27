@@ -84,7 +84,7 @@ public class CourseAction implements Serializable {
 				String base64logo = Base64.encodeBase64String(data.toByteArray());
 				courseStructure.setInstitutionLogo(base64logo);
 				
-				System.out.println(courseStructure.getInstitutionLogo());
+				tempLogoImage = null;
 			} catch (IOException e) {
 				return null;
 			}

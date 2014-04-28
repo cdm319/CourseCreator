@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
 	<head jsf:id="head">
 		
 	</head>
@@ -23,6 +23,9 @@
         	</p>
         	
         	<form jsf:id="frmCreateCourse" enctype="multipart/form-data">
+        		<h:commandButton styleClass="btn btn-primary btn-small" action="#{courseAction.useTestData}" value="Insert Test Data">
+        			<f:ajax render="@form" immediate="true"/>
+        		</h:commandButton>
         		<fieldset>
         			<legend><h2>Administrator Details</h2></legend>
         			

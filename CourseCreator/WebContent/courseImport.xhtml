@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<head jsf:id="head">
+		
+	</head>
+	<body jsf:id="body">
+		<ui:composition template="./template.xhtml">
+		
+		<ui:define name="title">Import Course from PowerPoint | CourseCreator</ui:define>
+		
+		<ui:define name="extraJs">
+			
+		</ui:define>
+		
+		<ui:define name="nav">
+			<li class="list-heading active">Import Course</li>
+        	<li class="list-heading"><a href="index.jsf">Quit</a></li>
+		</ui:define>
+		
+		<ui:define name="pageTitle">Import Course from PowerPoint</ui:define>
+		
+		<ui:define name="content">
+			<p>
+	        	Please upload your Course Structure presentation file using the form below.  For details on how to structure this file, please <a href="#" target="_blank">click here</a>.
+        	</p>
+        	<form jsf:id="frmImportStructure" enctype="multipart/form-data">
+        		<fieldset>
+        			<legend><h2>Upload PowerPoint (.pptx) Course Structure</h2></legend>
+        			
+        			<label jsf:for="txtCoursePowerPoint">
+        				<span>PowerPoint File</span>
+        				<input type="file" jsf:id="txtCoursePowerPoint" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" jsf:validator="#{validation.validatePowerPointFile}" jsf:value="#{courseAction.tempCoursePptx}"/>
+        				<h:message for="txtCoursePowerPoint" styleClass="alert-error"/>
+        			</label>
+        		</fieldset>
+        		
+        		<h:messages style="display: block;"></h:messages>
+        		
+        		<fieldset>
+        			<input type="submit" class="btn btn-primary" value="Create Course" jsf:action="#{courseAction.importCoursePptx}"/>
+					<input type="reset" class="btn" value="Clear Form"/>
+        		</fieldset>
+        	</form>
+		</ui:define>
+		
+		</ui:composition>
+	</body>
+</html>

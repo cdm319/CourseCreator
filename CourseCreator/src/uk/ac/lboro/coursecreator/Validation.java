@@ -70,6 +70,32 @@ public class Validation {
 	}
 	
 	/**
+	 * Validates and PowerPoint file upload field on the front end.
+	 *
+	 * @param context			The FacesContext object.
+	 * @param component			The UI Component related to the Validator.
+	 * @param convertedValue	The value currently set on the front end.
+	 */
+	public void validatePowerPointFile(FacesContext context, UIComponent component, Object convertedValue) {
+		Part tempFile = (Part) convertedValue;
+		List<String> fileTypes = new ArrayList<String>();
+		fileTypes.add("application/vnd.openxmlformats-officedocument.presentationml.presentation");
+		
+		if (tempFile.getSize() < 2) {
+			//smaller than 2 bytes
+			throw new ValidatorException(new FacesMessage("Please upload a valid .pptx file."));
+		}
+		if (tempFile.getSize() > 10485760) {
+			//larger than 10mb
+			throw new ValidatorException(new FacesMessage("Please upload a smaller presentation."));
+		}
+		if (!fileTypes.contains(tempFile.getContentType())) {
+			//not a valid pptx file
+			throw new ValidatorException(new FacesMessage("Presentation must be a PowerPoint 2007 or newer (.pptx) file."));
+		}
+	}
+	
+	/**
 	 * Validates any date field on the front end in UK date format.
 	 *
 	 * @param context			The FacesContext object.

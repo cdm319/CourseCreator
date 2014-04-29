@@ -23,6 +23,11 @@ import javax.faces.validator.ValidatorException;
 import javax.servlet.http.Part;
 
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
+import org.apache.poi.xslf.usermodel.XSLFShape;
+import org.apache.poi.xslf.usermodel.XSLFSlide;
+import org.apache.poi.xslf.usermodel.XSLFTextParagraph;
+import org.apache.poi.xslf.usermodel.XSLFTextRun;
+import org.apache.poi.xslf.usermodel.XSLFTextShape;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import uk.ac.lboro.coursecreator.model.Course;
@@ -104,8 +109,30 @@ public class CourseAction implements Serializable {
 				tempCoursePptx.write(pptxFile.getAbsolutePath());
 				
 				XMLSlideShow pptx = new XMLSlideShow(new FileInputStream(pptxFile));
+				XSLFSlide[] slides = pptx.getSlides();
+				XSLFShape[] shapes = slides[1].getShapes();
+				for (XSLFShape shape : shapes) {
+					String shapeText = "<p>";
+					if (shape instanceof XSLFTextShape) {
+						List<XSLFTextParagraph> paras = ((XSLFTextShape) shape).getTextParagraphs();
+						for (XSLFTextParagraph para: paras) {
+							List<XSLFTextRun> lines = para.getTextRuns();
+							for (XSLFTextRun line : lines) {
+								String text = line.getText();
+								if (text.equals(slides[1].getTitle())) {
+									shapeText += "<h2>" + text + "</h2>";
+								} else {
+									shapeText += text;
+								}
+							}
+						}
+					}
+					shapeText += "</p>";
+					System.out.println(shapeText);
+					pptxFile.delete();
+				}
 			} catch (Exception e) {
-				return null;
+				throw new ValidatorException(new FacesMessage("Invalid PowerPoint file detected."));
 			}
 		} else {
 			throw new ValidatorException(new FacesMessage("Invalid PowerPoint file detected."));

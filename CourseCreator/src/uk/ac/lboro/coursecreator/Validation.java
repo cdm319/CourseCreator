@@ -14,6 +14,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.servlet.http.Part;
 
+/**
+ * Managed bean that handles custom validation across the web application.
+ * 
+ * @author Chris Matthews <C.Matthews2-09@student.lboro.ac.uk>
+ */
 @ManagedBean
 @NoneScoped
 public class Validation {

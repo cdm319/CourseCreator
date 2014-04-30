@@ -109,28 +109,8 @@ public class CourseAction implements Serializable {
 				tempCoursePptx.write(pptxFile.getAbsolutePath());
 				
 				XMLSlideShow pptx = new XMLSlideShow(new FileInputStream(pptxFile));
-				XSLFSlide[] slides = pptx.getSlides();
-				XSLFShape[] shapes = slides[1].getShapes();
-				for (XSLFShape shape : shapes) {
-					String shapeText = "<p>";
-					if (shape instanceof XSLFTextShape) {
-						List<XSLFTextParagraph> paras = ((XSLFTextShape) shape).getTextParagraphs();
-						for (XSLFTextParagraph para: paras) {
-							List<XSLFTextRun> lines = para.getTextRuns();
-							for (XSLFTextRun line : lines) {
-								String text = line.getText();
-								if (text.equals(slides[1].getTitle())) {
-									shapeText += "<h2>" + text + "</h2>";
-								} else {
-									shapeText += text;
-								}
-							}
-						}
-					}
-					shapeText += "</p>";
-					System.out.println(shapeText);
-					pptxFile.delete();
-				}
+				
+				pptxFile.delete();
 			} catch (Exception e) {
 				throw new ValidatorException(new FacesMessage("Invalid PowerPoint file detected."));
 			}

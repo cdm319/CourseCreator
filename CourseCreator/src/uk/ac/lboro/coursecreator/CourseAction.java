@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,11 +24,6 @@ import javax.faces.validator.ValidatorException;
 import javax.servlet.http.Part;
 
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
-import org.apache.poi.xslf.usermodel.XSLFShape;
-import org.apache.poi.xslf.usermodel.XSLFSlide;
-import org.apache.poi.xslf.usermodel.XSLFTextParagraph;
-import org.apache.poi.xslf.usermodel.XSLFTextRun;
-import org.apache.poi.xslf.usermodel.XSLFTextShape;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import uk.ac.lboro.coursecreator.model.Course;
@@ -109,9 +105,26 @@ public class CourseAction implements Serializable {
 				tempCoursePptx.write(pptxFile.getAbsolutePath());
 				
 				XMLSlideShow pptx = new XMLSlideShow(new FileInputStream(pptxFile));
+				Course importedCourse = Powerpoint.parseCoursePresentation(pptx);
+				
+				courseStructure.setTitle(importedCourse.getTitle());
+				courseStructure.setBlurb(importedCourse.getBlurb());
+				courseStructure.setStartDate(importedCourse.getStartDate());
+				courseStructure.setIntroVideoId(importedCourse.getIntroVideoId());
+				courseStructure.setForumURL(importedCourse.getForumURL());
+				courseStructure.setInstitutionName(importedCourse.getInstitutionName());
+				courseStructure.setInstitutionURL(importedCourse.getInstitutionURL());
+				courseStructure.setInstitutionLogo(importedCourse.getInstitutionLogo());
+				courseStructure.setAdministratorName(importedCourse.getAdministratorName());
+				courseStructure.setAdministratorEmail(importedCourse.getAdministratorEmail());
+				
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+				tempDate = df.format(courseStructure.getStartDate());
+				
+				tempIntroVid = "http://www.youtube.com/watch?v=" + courseStructure.getIntroVideoId();
 				
 				pptxFile.delete();
-			} catch (Exception e) {
+			} catch (IOException e) {
 				throw new ValidatorException(new FacesMessage("Invalid PowerPoint file detected."));
 			}
 		} else {

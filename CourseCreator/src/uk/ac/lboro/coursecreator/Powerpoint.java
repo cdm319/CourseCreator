@@ -27,8 +27,8 @@ import uk.ac.lboro.coursecreator.model.Course;
  */
 public class Powerpoint {
 	//constant regex patterns
-	private static final Pattern URL_REGEX = Pattern.compile("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?\\+\\%/\\.\\w]+)?");
-	private static final Pattern NAMED_EMAIL_REGEX = Pattern.compile("(?:\"?([^\"]*)\"?\\s)?(?:<?([A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6})>?)");
+	private static final Pattern URL_REGEX = Pattern.compile("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#!&\\n\\-=?\\+\\%/\\.\\w]+)?");
+	private static final Pattern NAMED_EMAIL_REGEX = Pattern.compile("(?:\"?([^\"]*)\"?\\s)?(?:<?([A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6})>?)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern DATE_REGEX = Pattern.compile("(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](20)\\d\\d");
 	private static final Pattern YOUTUBE_REGEX = Pattern.compile("^(?:https?:\\/\\/)?(?:www\\.)?(?:youtu\\.be\\/|youtube\\.com\\/(?:embed\\/|v\\/|watch\\?v=|watch\\?.+&v=))((\\w|-){11})(?:\\S+)?$");
 	private static final Pattern UNI_NAME_REGEX = Pattern.compile("(([A-Z][a-zA-Z]*\\s*)+)?(University|College|School|Institution)(\\s)?(of|Of)?(\\s)?(([A-Z][a-zA-Z]*\\s*)+)?");
@@ -372,6 +372,29 @@ public class Powerpoint {
 		return null;
 	}
 	
+	public static String getLongestParagraph(XSLFSlide slide) {
+		XSLFShape[] shapes = slide.getShapes();
+		String longestParagraph = "";
+		
+		//loop through every shape
+		for (XSLFShape shape : shapes) {
+			if (shape instanceof XSLFTextShape) {
+				List<XSLFTextParagraph> paras = ((XSLFTextShape) shape).getTextParagraphs();
+				
+				//loop through every paragraph, if it is longer than longestParagraph, replace
+				for (XSLFTextParagraph para : paras) {
+					String text = para.getText();
+					
+					if (text.length() > longestParagraph.length()) {
+						longestParagraph = text;
+					}
+				}
+			}
+		}
+		
+		return longestParagraph;
+	}
+	
 	/**
 	 * Method to parse a Course Structure presentation into meaningful data
 	 * and return this in a Course model object.
@@ -394,6 +417,7 @@ public class Powerpoint {
 				course.setTitle(getSlideTitle(slide));
 				
 				//get course blurb
+				course.setBlurb(getLongestParagraph(slide));
 				
 				//get course start date
 				course.setStartDate(getDate(slide));
@@ -431,8 +455,10 @@ public class Powerpoint {
 				
 				//get administrator details
 				List<String> adminDetails = getNamedEmailAddress(slide);
-				course.setAdministratorName(adminDetails.get(0));	//administrator name
-				course.setAdministratorEmail(adminDetails.get(1));	//administrator email address
+				if (adminDetails != null && adminDetails.size() > 0) {
+					course.setAdministratorName(adminDetails.get(0));	//administrator name
+					course.setAdministratorEmail(adminDetails.get(1));	//administrator email address
+				}
 				
 			} else if (i == 1) {
 				//potential timetable slide

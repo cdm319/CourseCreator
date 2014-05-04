@@ -33,8 +33,7 @@ public class Course {
 	@NotEmpty(message="Please enter the Course Start Date.")
 	private Date startDate;
 	
-	//Course Forum URL, optional, but must be a valid URL
-	@URL(message="Please enter a valid URL.")
+	//Course Forum URL, optional, validated through custom method
 	private String forumURL;
 	
 	//Institution name, can't be blank, must be between 3 and 80 characters
@@ -42,9 +41,8 @@ public class Course {
 	@Size(min=3, max=80, message="Please enter between 3 and 80 characters.")
 	private String institutionName;
 	
-	//Institution URL, can't be blank, must be a valid URL
+	//Institution URL, can't be blank, URL validated through custom method
 	@NotEmpty(message="Please enter the Institution's web address.")
-	@URL(message="Please enter a valid URL.")
 	private String institutionURL;
 	
 	//Institution Logo, optional, Base64 encoded image

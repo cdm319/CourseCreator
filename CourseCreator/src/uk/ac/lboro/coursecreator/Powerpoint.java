@@ -27,7 +27,7 @@ import uk.ac.lboro.coursecreator.model.Course;
  */
 public class Powerpoint {
 	//constant regex patterns
-	private static final Pattern URL_REGEX = Pattern.compile("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#!&\\n\\-=?\\+\\%/\\.\\w]+)?");
+	private static final Pattern URL_REGEX = Pattern.compile("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?(https://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#!&\\n\\-=?\\+\\%/\\.\\w]+)?");
 	private static final Pattern NAMED_EMAIL_REGEX = Pattern.compile("(?:\"?([^\"]*)\"?\\s)?(?:<?([A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6})>?)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern DATE_REGEX = Pattern.compile("(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](20)\\d\\d");
 	private static final Pattern YOUTUBE_REGEX = Pattern.compile("^(?:https?:\\/\\/)?(?:www\\.)?(?:youtu\\.be\\/|youtube\\.com\\/(?:embed\\/|v\\/|watch\\?v=|watch\\?.+&v=))((\\w|-){11})(?:\\S+)?$");
@@ -462,7 +462,6 @@ public class Powerpoint {
 				
 			} else if (i == 1) {
 				//potential timetable slide
-				
 			}
 		}
 		

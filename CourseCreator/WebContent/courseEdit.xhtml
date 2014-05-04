@@ -50,7 +50,7 @@
         			
         			<label jsf:for="txtInstitutionURL">
         				<span>Institution URL</span>
-        				<input type="url" jsf:id="txtInstitutionURL" placeholder="e.g. http://www.lboro.ac.uk" jsf:value="#{courseAction.courseStructure.institutionURL}"/>
+        				<input type="url" jsf:id="txtInstitutionURL" placeholder="e.g. http://www.lboro.ac.uk" jsf:validator="#{validation.validateURL}" jsf:value="#{courseAction.courseStructure.institutionURL}"/>
         				<h:message for="txtInstitutionURL" styleClass="alert-error"/>
         			</label>
         			
@@ -90,7 +90,7 @@
         			
         			<label jsf:for="txtCourseForumURL">
         				<span>Course Forum URL<span class="note">(optional)</span></span>
-        				<input type="url" jsf:id="txtCourseForumURL" placeholder="e.g. http://groups.google.com/forum/?fromgroups#!forum/course-builder-forum" jsf:value="#{courseAction.courseStructure.forumURL}"/>
+        				<input type="url" jsf:id="txtCourseForumURL" placeholder="e.g. http://groups.google.com/forum/?fromgroups#!forum/course-builder-forum" jsf:validator="#{validation.validateOptionalURL}" jsf:value="#{courseAction.courseStructure.forumURL}"/>
         				<h:message for="txtCourseForumURL" styleClass="alert-error"/>
         			</label>
         		</fieldset>

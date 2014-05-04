@@ -58,6 +58,8 @@
         	</div>
         	
         	<h2>Units &amp; Lessons</h2>
+        	<h:link value="Import Unit PPTX" outcome="unitImport" styleClass="btn btn-primary btn-small"/>
+        	<h:link value="Create Unit from Scratch" outcome="unitCreate" styleClass="btn btn-small" style="margin-left: 1em;"/>
         	<div class="alert-error" jsf:rendered="#{empty courseAction.courseStructure.units}">No units or lessons have been added yet.</div>
         	<table class="table-vertical" jsf:rendered="#{not empty courseAction.courseStructure.units}">
         		<thead>
@@ -116,6 +118,8 @@
         			</c:forEach>
         		</tbody>
         	</table>
+        	<h:link value="Import Unit PPTX" outcome="unitImport" styleClass="btn btn-primary btn-small"/>
+        	<h:link value="Create Unit from Scratch" outcome="unitCreate" styleClass="btn btn-small" style="margin-left: 1em;"/>
 		</ui:define>
 		
 		</ui:composition>

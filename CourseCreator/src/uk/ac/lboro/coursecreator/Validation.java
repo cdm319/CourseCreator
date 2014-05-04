@@ -23,6 +23,7 @@ import javax.servlet.http.Part;
 @NoneScoped
 public class Validation {
 	//constant regex patterns for validation
+	private static final Pattern URL_REGEX = Pattern.compile("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?(https://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#!&\\n\\-=?\\+\\%/\\.\\w]+)?");
 	private static final Pattern YOUTUBE_REGEX = Pattern.compile("^(?:https?:\\/\\/)?(?:www\\.)?(?:youtu\\.be\\/|youtube\\.com\\/(?:embed\\/|v\\/|watch\\?v=|watch\\?.+&v=))((\\w|-){11})(?:\\S+)?$");
 	
 	
@@ -150,6 +151,47 @@ public class Validation {
 		if (!ytMatch.find()) {
 			//YouTube URL not valid
 			throw new ValidatorException(new FacesMessage("Please enter a valid YouTube URL."));
+		}
+	}
+	
+	/**
+	 * Validates any URL field on the front end.  Custom method used as the Hibernate Validator's
+	 * \@URL annotation is too strict (i.e. requires a schema such as http://).
+	 * 
+	 * @param context			The FacesContext object.
+	 * @param component			The UI Component related to the Validator.
+	 * @param convertedValue	The value currently set on the front end.
+	 */
+	public void validateURL(FacesContext context, UIComponent component, Object convertedValue) {
+		String url = convertedValue.toString();
+		
+		Matcher urlMatch = URL_REGEX.matcher(url);
+		
+		if (!urlMatch.find()) {
+			//URL not valid
+			throw new ValidatorException(new FacesMessage("Please enter a valid URL."));
+		}
+	}
+	
+	/**
+	 * Validates any optional URL field on the front end.  Custom method used as the Hibernate Validator's
+	 * \@URL annotation is too strict (i.e. requires a schema such as http://).
+	 * 
+	 * @param context			The FacesContext object.
+	 * @param component			The UI Component related to the Validator.
+	 * @param convertedValue	The value currently set on the front end.
+	 */
+	public void validateOptionalURL(FacesContext context, UIComponent component, Object convertedValue) {
+		String url = convertedValue.toString();
+		
+		//field is optional, so only validate if it's not blank
+		if (null != url && !"".equals(url)) {
+			Matcher urlMatch = URL_REGEX.matcher(url);
+			
+			if (!urlMatch.find()) {
+				//URL not valid
+				throw new ValidatorException(new FacesMessage("Please enter a valid URL."));
+			}
 		}
 	}
 }

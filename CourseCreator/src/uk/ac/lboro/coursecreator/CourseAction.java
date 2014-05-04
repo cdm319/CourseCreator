@@ -57,7 +57,7 @@ public class CourseAction implements Serializable {
 	private Part tempCoursePptx;
 	
 	/**
-	 * Constructor creates new Course model object.
+	 * Constructor creates new Course model object if necessary.
 	 */
 	public CourseAction() {
 		if(courseStructure == null) {
@@ -66,13 +66,10 @@ public class CourseAction implements Serializable {
 	}
 	
 	/**
-	 * Throwaway test methods for form testing.
+	 * Method that adds sample data to the Create Course page via an AJAX call.
 	 * 
 	 * @return null
 	 */
-	public String testForm() {
-		return "index";
-	}
 	public String useTestData() {
 		courseStructure.setTitle("Advanced Human-Computer Interaction");
 		courseStructure.setBlurb("The aim of the module is to introduce to students advanced concepts, definitions "
@@ -186,44 +183,6 @@ public class CourseAction implements Serializable {
 				courseStructure.setIntroVideoId(youtubeId);
 			}
 		}
-		
-		//setup fake units and lessons to test Course Details page.
-			List<Unit> units = new ArrayList<Unit>();
-			
-			for (int i=0; i < 3; i++) {
-				Unit unit = new Unit();
-				unit.setUnitId(i);
-				unit.setTitle("Unit " + String.valueOf(i));
-				unit.setReleaseDate(new Date());
-				
-				List<Lesson> lessons = new ArrayList<Lesson>();
-				
-				if(unit.getUnitId() != 1) {
-					for (int j=0; j < 5; j++) {
-						Lesson lesson = new Lesson();
-						
-						lesson.setLessonId(j);
-						lesson.setLessonTitle("Lesson " + String.valueOf(j));
-						lesson.setLessonNotes("Curabitur sagittis sed quam vitae sagittis. Nulla ut mollis elit, et "
-								+ "faucibus dolor. Interdum et malesuada fames ac ante ipsum primis in faucibus. "
-								+ "Pellentesque mattis vel tellus et convallis. Phasellus laoreet, erat et euismod "
-								+ "imperdiet, dui tortor elementum arcu, sit amet tempus diam nibh in dui.");
-						lesson.setLessonObjectives("Curabitur sagittis sed quam vitae sagittis. Nulla ut mollis elit, et "
-								+ "faucibus dolor. Interdum et malesuada fames ac ante ipsum primis in faucibus. "
-								+ "Pellentesque mattis vel tellus et convallis. Phasellus laoreet, erat et euismod "
-								+ "imperdiet, dui tortor elementum arcu, sit amet tempus diam nibh in dui.");
-						lesson.setLessonVideoId("j-jKUDNm9EM");
-						
-						lessons.add(lesson);
-					}
-				}
-				
-				unit.setLessons(lessons);
-				
-				units.add(unit);
-			}
-			
-			courseStructure.setUnits(units);
 		
 		//move on to the Course Details page
 		return "courseDetails";

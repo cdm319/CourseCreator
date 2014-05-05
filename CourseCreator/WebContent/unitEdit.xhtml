@@ -6,21 +6,21 @@
 	<body jsf:id="body">
 		<ui:composition template="./template.xhtml">
 		
-		<ui:define name="title">Create Unit | CourseCreator</ui:define>
+		<ui:define name="title">Edit Unit | CourseCreator</ui:define>
 		
 		<ui:define name="nav">
 			<li class="list-heading active"><a href="courseDetails.jsf">Course Details</a></li>
         	<li class="list-heading"><a href="index.jsf">Quit</a></li>
 		</ui:define>
 		
-		<ui:define name="pageTitle">Create Unit</ui:define>
+		<ui:define name="pageTitle">Edit Unit</ui:define>
 		
 		<ui:define name="content">
 			<p>
-	        	Please use the form below to enter the details of the new Unit for the #{courseAction.course.title} MOOC.
+	        	Please use the form below to edit the details of the #{courseAction.currentUnit.title} Unit for the #{courseAction.course.title} MOOC.
         	</p>
         	
-        	<form jsf:id="frmCreateUnit">
+        	<form jsf:id="frmEditUnit">
         		<fieldset>
         			<legend><h2>Unit Details</h2></legend>
         			
@@ -40,8 +40,8 @@
         		<h:messages style="display: none;"></h:messages>
         		
         		<fieldset>
-        			<input type="submit" class="btn btn-primary" value="Create Unit" jsf:action="#{courseAction.createUnit}"/>
-					<input type="reset" class="btn" value="Clear Form"/>
+        			<input type="submit" class="btn btn-primary" value="Save Changes" jsf:action="#{courseAction.saveUnitChanges}"/>
+					<h:link value="Cancel" outcome="unitDetails" styleClass="btn"/>
         		</fieldset>
         	</form>
 		</ui:define>

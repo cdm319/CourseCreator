@@ -23,21 +23,18 @@
         	</p>
         	
         	<form jsf:id="frmCreateCourse" enctype="multipart/form-data">
-        		<h:commandButton styleClass="btn btn-primary btn-small" action="#{courseAction.useTestData}" value="Insert Test Data">
-        			<f:ajax render="@form" immediate="true"/>
-        		</h:commandButton>
         		<fieldset>
         			<legend><h2>Administrator Details</h2></legend>
         			
         			<label jsf:for="txtAdministratorName">
         				<span>Administrator Name</span>
-        				<input type="text" jsf:id="txtAdministratorName"  placeholder="e.g. Joe Bloggs" jsf:validator="#{validation.validateTextOnly}" jsf:value="#{courseAction.courseStructure.administratorName}"/>
+        				<input type="text" jsf:id="txtAdministratorName"  placeholder="e.g. Joe Bloggs" jsf:validator="#{validation.validateTextOnly}" jsf:value="#{courseAction.course.administratorName}"/>
         				<h:message for="txtAdministratorName" styleClass="alert-error"/>
         			</label>
         			
         			<label jsf:for="txtAdministratorEmail">
         				<span>Administrator Email</span>
-        				<input type="email" jsf:id="txtAdministratorEmail" placeholder="e.g. joe.bloggs@email.com" jsf:value="#{courseAction.courseStructure.administratorEmail}"/>
+        				<input type="email" jsf:id="txtAdministratorEmail" placeholder="e.g. joe.bloggs@email.com" jsf:value="#{courseAction.course.administratorEmail}"/>
         				<h:message for="txtAdministratorEmail" styleClass="alert-error"/>
         			</label>
         		</fieldset>
@@ -47,13 +44,13 @@
         			
         			<label jsf:for="txtInstitutionName">
         				<span>Institution Name</span>
-        				<input type="text" jsf:id="txtInstitutionName" placeholder="e.g. Loughborough University" jsf:value="#{courseAction.courseStructure.institutionName}"/>
+        				<input type="text" jsf:id="txtInstitutionName" placeholder="e.g. Loughborough University" jsf:value="#{courseAction.course.institutionName}"/>
         				<h:message for="txtInstitutionName" styleClass="alert-error"/>
         			</label>
         			
         			<label jsf:for="txtInstitutionURL">
         				<span>Institution URL</span>
-        				<input type="url" jsf:id="txtInstitutionURL" placeholder="e.g. http://www.lboro.ac.uk" jsf:validator="#{validation.validateURL}" jsf:value="#{courseAction.courseStructure.institutionURL}"/>
+        				<input type="url" jsf:id="txtInstitutionURL" placeholder="e.g. http://www.lboro.ac.uk" jsf:validator="#{validation.validateURL}" jsf:value="#{courseAction.course.institutionURL}"/>
         				<h:message for="txtInstitutionURL" styleClass="alert-error"/>
         			</label>
         			
@@ -69,13 +66,13 @@
         			
         			<label jsf:for="txtCourseTitle">
         				<span>Course Title</span>
-        				<input type="text" jsf:id="txtCourseTitle" placeholder="e.g. Advanced Human-Computer Interaction" jsf:value="#{courseAction.courseStructure.title}"/>
+        				<input type="text" jsf:id="txtCourseTitle" placeholder="e.g. Advanced Human-Computer Interaction" jsf:value="#{courseAction.course.title}"/>
         				<h:message for="txtCourseTitle" styleClass="alert-error"/>
         			</label>
         			
         			<label jsf:for="txtCourseBlurb">
         				<span>Course Blurb</span>
-        				<textarea jsf:id="txtCourseBlurb" rows="5" placeholder="e.g. This course covers core and advanced Human-Computer Interaction principles, focusing heavily on current and future interfaces." jsf:value="#{courseAction.courseStructure.blurb}"></textarea>
+        				<textarea jsf:id="txtCourseBlurb" rows="5" placeholder="e.g. This course covers core and advanced Human-Computer Interaction principles, focusing heavily on current and future interfaces." jsf:value="#{courseAction.course.blurb}"></textarea>
         				<h:message for="txtCourseBlurb" styleClass="alert-error"/>
         			</label>
         			
@@ -93,7 +90,7 @@
         			
         			<label jsf:for="txtCourseForumURL">
         				<span>Course Forum URL<span class="note">(optional)</span></span>
-        				<input type="url" jsf:id="txtCourseForumURL" placeholder="e.g. http://groups.google.com/forum/?fromgroups#!forum/course-builder-forum" jsf:validator="#{validation.validateOptionalURL}" jsf:value="#{courseAction.courseStructure.forumURL}"/>
+        				<input type="url" jsf:id="txtCourseForumURL" placeholder="e.g. http://groups.google.com/forum/?fromgroups#!forum/course-builder-forum" jsf:validator="#{validation.validateOptionalURL}" jsf:value="#{courseAction.course.forumURL}"/>
         				<h:message for="txtCourseForumURL" styleClass="alert-error"/>
         			</label>
         		</fieldset>

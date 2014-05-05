@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<head jsf:id="head">
+		
+	</head>
+	<body jsf:id="body">
+		<ui:composition template="./template.xhtml">
+		
+		<ui:define name="title">Unit Details | CourseCreator</ui:define>
+		
+		<ui:define name="extraJs">
+			<script jsf:name="js/tables.min.js"></script>
+		</ui:define>
+		
+		<ui:define name="nav">
+			<li class="list-heading active"><a href="courseDetails.jsf">Course Details</a></li>
+        	<li class="list-heading"><a href="index.jsf">Quit</a></li>
+		</ui:define>
+		
+		<ui:define name="pageTitle">Review Unit Details</ui:define>
+		
+		<ui:define name="content">
+			<div class="key-info">
+	        	<h2>Unit Details</h2>
+	        	<form jsf:id="frmUnitDtls" style="margin: 0;">
+	        	<table class="table-horizontal table-single" jsf:id="tblUnitDetails">
+		        	<tr>
+		        		<th>Unit ID: </th>
+						<td><h:outputText value="#{courseAction.currentUnit.unitId}"/></td>
+		        	</tr>
+		        	<tr>
+		        		<th>Unit Title: </th>
+		        		<td><h:outputText value="#{courseAction.currentUnit.title}"/></td>
+		        	</tr>
+		        	<tr>
+		        		<th>Release Date: </th>
+		        		<td><h:outputText value="#{courseAction.currentUnit.releaseDate}"><f:convertDateTime type="date" pattern="dd/MM/yyyy"/></h:outputText></td>
+		        	</tr>
+	        	</table>
+	        	<h:commandLink action="#{courseAction.editCurrentUnit}" styleClass="btn btn-primary btn-small">Edit Unit</h:commandLink>
+	        	</form>
+        	</div>
+        	
+        	<h2>Lessons</h2>
+        	<h:link value="Add Lesson" outcome="lessonCreate" styleClass="btn btn-primary btn-small"/>
+        	<div class="alert-error" jsf:rendered="#{empty courseAction.currentUnit.lessons}">No lessons have been added yet.</div>
+        	<table class="table-vertical" jsf:rendered="#{not empty courseAction.currentUnit.lessons}">
+        		<thead>
+        			<tr>
+        				<th></th>
+        			</tr>
+        		</thead>
+        		<tbody>
+        			<c:forEach items="#{courseAction.currentUnit.lessons}" var="lesson">
+        				
+        			</c:forEach>
+        		</tbody>
+        	</table>
+		</ui:define>
+		
+		</ui:composition>
+	</body>
+</html>

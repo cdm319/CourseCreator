@@ -13,7 +13,7 @@
 		</ui:define>
 		
 		<ui:define name="nav">
-			<li class="list-heading active">Course Details</li>
+			<li class="list-heading active"><a href="courseDetails.jsf">Course Details</a></li>
         	<li class="list-heading"><a href="index.jsf">Quit</a></li>
 		</ui:define>
 		
@@ -25,101 +25,111 @@
 	        	<table class="table-horizontal table-double" jsf:id="tblCourseDetails">
 		        	<tr>
 		        		<th>Course Title: </th>
-						<td class="wide"><h:outputText value="#{courseAction.courseStructure.title}"/></td>
+						<td class="wide"><h:outputText value="#{courseAction.course.title}"/></td>
 						<th>Institution Name: </th>
-		        		<td><h:outputText value="#{courseAction.courseStructure.institutionName}"/></td>
+		        		<td><h:outputText value="#{courseAction.course.institutionName}"/></td>
 		        	</tr>
 		        	<tr>
 		        		<th>Course Blurb: </th>
-		        		<td class="wide"><h:outputText value="#{courseAction.courseStructure.blurb}"/></td>
+		        		<td class="wide"><h:outputText value="#{courseAction.course.blurb}"/></td>
 		        		<th>Institution Logo: </th>
-		        		<td><h:graphicImage value="data:image/png;base64,#{courseAction.courseStructure.institutionLogo}" alt="logo" style="width:auto;max-height: 4em;"/></td>
+		        		<td><h:graphicImage value="data:image/png;base64,#{courseAction.course.institutionLogo}" alt="logo" style="width:auto;max-height: 4em;"/></td>
 		        	</tr>
 		        	<tr>
 		        		<th>Course Video: </th>
-		        		<td class="wide"><h:outputLink value="http://youtube.com/watch?v=#{courseAction.courseStructure.introVideoId}"><h:outputText value="http://youtube.com/watch?v=#{courseAction.courseStructure.introVideoId}"/></h:outputLink></td>
+		        		<td class="wide"><h:outputLink value="http://youtube.com/watch?v=#{courseAction.course.introVideoId}"><h:outputText value="http://youtube.com/watch?v=#{courseAction.course.introVideoId}"/></h:outputLink></td>
 		        		<th>Institution URL: </th>
-		        		<td><h:outputLink value="#{courseAction.courseStructure.institutionURL}"><h:outputText value="#{courseAction.courseStructure.institutionURL}"/></h:outputLink></td>
+		        		<td><h:outputLink value="#{courseAction.course.institutionURL}"><h:outputText value="#{courseAction.course.institutionURL}"/></h:outputLink></td>
 		        	</tr>
 		        	<tr>
 		        		<th>Course Start Date: </th>
-		        		<td class="wide"><h:outputText value="#{courseAction.courseStructure.startDate}"><f:convertDateTime type="date" pattern="dd/MM/yyyy"/></h:outputText></td>
+		        		<td class="wide"><h:outputText value="#{courseAction.course.startDate}"><f:convertDateTime type="date" pattern="dd/MM/yyyy"/></h:outputText></td>
 		        		<th>Admin Name: </th>
-		        		<td><h:outputText value="#{courseAction.courseStructure.administratorName}"/></td>
+		        		<td><h:outputText value="#{courseAction.course.administratorName}"/></td>
 		        	</tr>
 		        	<tr>
 		        		<th>Course Forum URL: </th>
-		        		<td class="wide"><h:outputLink value="#{courseAction.courseStructure.forumURL}"><h:outputText value="#{courseAction.courseStructure.forumURL}"/></h:outputLink></td>
+		        		<td class="wide"><h:outputLink value="#{courseAction.course.forumURL}"><h:outputText value="#{courseAction.course.forumURL}"/></h:outputLink></td>
 		        		<th>Admin Email: </th>
-		        		<td><h:outputText value="#{courseAction.courseStructure.administratorEmail}"/></td>
+		        		<td><h:outputText value="#{courseAction.course.administratorEmail}"/></td>
 		        	</tr>
 	        	</table>
 	        	<h:link value="Edit Course" outcome="courseEdit" styleClass="btn btn-primary btn-small"/>
         	</div>
         	
         	<h2>Units &amp; Lessons</h2>
-        	<h:link value="Import Unit PPTX" outcome="unitImport" styleClass="btn btn-primary btn-small"/>
-        	<h:link value="Create Unit from Scratch" outcome="unitCreate" styleClass="btn btn-small" style="margin-left: 1em;"/>
-        	<div class="alert-error" jsf:rendered="#{empty courseAction.courseStructure.units}">No units or lessons have been added yet.</div>
-        	<table class="table-vertical" jsf:rendered="#{not empty courseAction.courseStructure.units}">
-        		<thead>
-        			<tr>
-        				<th></th>
-        				<th>Unit #</th>
-        				<th>Unit Title</th>
-        				<th>Lessons</th>
-        				<th>Release Date</th>
-        				<th></th>
-        				<th></th>
-        			</tr>
-        		</thead>
-        		<tbody>
-        			<c:forEach items="#{courseAction.courseStructure.units}" var="unit">
-        				<tr>
-        					<td><a href="#" class="btn btn-small btn-primary btn-inline" onclick="toggleChild($(this), $('#unit#{unit.unitId}-child')); return false;">&#43;</a></td>
-        					<td><h:outputText value="#{unit.unitId}"/></td>
-        					<td><h:outputText value="#{unit.title}"/></td>
-        					<td><h:outputText value="#{unit.lessons.size()}"/></td>
-        					<td><h:outputText value="#{unit.releaseDate}"><f:convertDateTime type="date" pattern="dd/MM/yyyy"/></h:outputText></td>
-        					<td></td>
-        					<td></td>
-        				</tr>
-        				<c:if test="#{unit.lessons.size() > 0}">
-        					<tr class="child-row" id="unit#{unit.unitId}-child">
-        						<td></td>
-        						<td colspan="6">
-        							<table class="table-vertical">
-        								<thead>
-        									<tr>
-        										<th>Lesson #</th>
-        										<th>Lesson Title</th>
-        										<th>Lesson Notes</th>
-        										<th>Lesson Video</th>
-        									</tr>
-        								</thead>
-        								<tbody>
-        									<c:forEach items="#{unit.lessons}" var="lesson">
-        										<tr>
-        											<td><h:outputText value="#{lesson.lessonId}"/></td>
-        											<td><h:outputText value="#{lesson.lessonTitle}"/></td>
-        											<td><h:outputText value="#{lesson.shortLessonNotes}"/></td>
-        											<td>
-        												<a class="img-link" href="http://www.youtube.com/watch?v=#{lesson.lessonVideoId}">
-        												<img src="http://img.youtube.com/vi/#{lesson.lessonVideoId}/hqdefault.jpg" height="45" width="70" alt="#{lesson.lessonTitle}"/>
-        												</a>
-        											</td>
-        										</tr>
-        									</c:forEach>
-        								</tbody>
-        							</table>
-        						</td>
-        					</tr>
-        				</c:if>
-        			</c:forEach>
-        		</tbody>
-        	</table>
-        	<h:link value="Import Unit PPTX" outcome="unitImport" styleClass="btn btn-primary btn-small"/>
-        	<h:link value="Create Unit from Scratch" outcome="unitCreate" styleClass="btn btn-small" style="margin-left: 1em;"/>
+        	<form jsf:id="frmCourseDetails" style="margin-top: 0;">
+	        	<h:link value="Import Unit PPTX" outcome="unitImport" styleClass="btn btn-primary btn-small"/>
+	        	<h:link value="Create Unit from Scratch" outcome="unitCreate" styleClass="btn btn-small" style="margin-left: 1em;"/>
+	        	<div class="alert-error" jsf:rendered="#{empty courseAction.course.units}">No units or lessons have been added yet.</div>
+	        	<table class="table-vertical" jsf:rendered="#{not empty courseAction.course.units}">
+	        		<thead>
+	        			<tr>
+	        				<th></th>
+	        				<th>Unit #</th>
+	        				<th>Unit Title</th>
+	        				<th>Lessons</th>
+	        				<th>Release Date</th>
+	        				<th></th>
+	        				<th></th>
+	        			</tr>
+	        		</thead>
+	        		<tbody>
+	        			<c:forEach items="#{courseAction.course.units}" var="unit">
+	        				<tr>
+	        					<td><a href="#" class="btn btn-small btn-inline" onclick="toggleChild($(this), $('#unit#{unit.unitId}-child')); return false;">&#43;</a></td>
+	        					<td><h:outputText value="#{unit.unitId}"/></td>
+	        					<td><h:outputText value="#{unit.title}"/></td>
+	        					<td><h:outputText value="#{unit.lessons.size()}"/></td>
+	        					<td><h:outputText value="#{unit.releaseDate}"><f:convertDateTime type="date" pattern="dd/MM/yyyy"/></h:outputText></td>
+	        					<td>
+	        						<h:commandLink action="#{courseAction.showSelectedUnit}" styleClass="btn btn-small btn-inline">
+	        							<f:setPropertyActionListener target="#{courseAction.selectedUnit}" value="#{unit.unitId}"/>
+	        							Edit
+	        						</h:commandLink>
+	        					</td>
+	        					<td>
+	        						<h:commandLink action="#{courseAction.deleteSelectedUnit}" styleClass="btn btn-small btn-inline">
+	        							<f:setPropertyActionListener target="#{courseAction.selectedUnit}" value="#{unit.unitId}"/>
+	        							Delete
+	        						</h:commandLink>
+	        					</td>
+	        				</tr>
+	        				<c:if test="#{unit.lessons.size() > 0}">
+	        					<tr class="child-row" id="unit#{unit.unitId}-child">
+	        						<td></td>
+	        						<td colspan="6">
+	        							<table class="table-vertical">
+	        								<thead>
+	        									<tr>
+	        										<th>Lesson #</th>
+	        										<th>Lesson Title</th>
+	        										<th>Lesson Notes</th>
+	        										<th>Lesson Video</th>
+	        									</tr>
+	        								</thead>
+	        								<tbody>
+	        									<c:forEach items="#{unit.lessons}" var="lesson">
+	        										<tr>
+	        											<td><h:outputText value="#{lesson.lessonId}"/></td>
+	        											<td><h:outputText value="#{lesson.lessonTitle}"/></td>
+	        											<td><h:outputText value="#{lesson.shortLessonNotes}"/></td>
+	        											<td>
+	        												<a class="img-link" href="http://www.youtube.com/watch?v=#{lesson.lessonVideoId}">
+	        												<img src="http://img.youtube.com/vi/#{lesson.lessonVideoId}/hqdefault.jpg" height="45" width="70" alt="#{lesson.lessonTitle}"/>
+	        												</a>
+	        											</td>
+	        										</tr>
+	        									</c:forEach>
+	        								</tbody>
+	        							</table>
+	        						</td>
+	        					</tr>
+	        				</c:if>
+	        			</c:forEach>
+	        		</tbody>
+	        	</table>
+        	</form>
 		</ui:define>
 		
 		</ui:composition>

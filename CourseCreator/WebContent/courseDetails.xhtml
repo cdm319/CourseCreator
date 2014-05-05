@@ -79,7 +79,12 @@
 	        				<tr>
 	        					<td><a href="#" class="btn btn-small btn-inline" onclick="toggleChild($(this), $('#unit#{unit.unitId}-child')); return false;">&#43;</a></td>
 	        					<td><h:outputText value="#{unit.unitId}"/></td>
-	        					<td><h:outputText value="#{unit.title}"/></td>
+	        					<td>
+	        						<h:commandLink action="#{courseAction.showSelectedUnit}">
+	        							<f:setPropertyActionListener target="#{courseAction.selectedUnit}" value="#{unit.unitId}"/>
+	        							<h:outputText value="#{unit.title}"/>
+	        						</h:commandLink>
+	        					</td>
 	        					<td><h:outputText value="#{unit.lessons.size()}"/></td>
 	        					<td><h:outputText value="#{unit.releaseDate}"><f:convertDateTime type="date" pattern="dd/MM/yyyy"/></h:outputText></td>
 	        					<td>
@@ -89,7 +94,7 @@
 	        						</h:commandLink>
 	        					</td>
 	        					<td>
-	        						<h:commandLink action="#{courseAction.deleteSelectedUnit}" styleClass="btn btn-small btn-inline">
+	        						<h:commandLink action="#{courseAction.deleteSelectedUnit}" styleClass="btn btn-small btn-inline" onclick="if(!confirm('Do you really want to delete #{unit.title}?')) { return false; }">
 	        							<f:setPropertyActionListener target="#{courseAction.selectedUnit}" value="#{unit.unitId}"/>
 	        							Delete
 	        						</h:commandLink>

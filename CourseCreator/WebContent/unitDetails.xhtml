@@ -42,20 +42,50 @@
         	</div>
         	
         	<h2>Lessons</h2>
-        	<h:link value="Add Lesson" outcome="lessonCreate" styleClass="btn btn-primary btn-small"/>
-        	<div class="alert-error" jsf:rendered="#{empty courseAction.currentUnit.lessons}">No lessons have been added yet.</div>
-        	<table class="table-vertical" jsf:rendered="#{not empty courseAction.currentUnit.lessons}">
-        		<thead>
-        			<tr>
-        				<th></th>
-        			</tr>
-        		</thead>
-        		<tbody>
-        			<c:forEach items="#{courseAction.currentUnit.lessons}" var="lesson">
-        				
-        			</c:forEach>
-        		</tbody>
-        	</table>
+        	<form jsf:id="frmUnitDetails" style="margin-top: 0;">
+	        	<h:link value="Add Lesson" outcome="lessonCreate" styleClass="btn btn-primary btn-small"/>
+	        	<div class="alert-error" jsf:rendered="#{empty courseAction.currentUnit.lessons}">No lessons have been added yet.</div>
+	        	<table class="table-vertical" jsf:rendered="#{not empty courseAction.currentUnit.lessons}">
+	        		<thead>
+	        			<tr>
+	        				<th>Lesson #</th>
+	        				<th>Lesson Title</th>
+	        				<th>Lesson Notes</th>
+	        				<th>Lesson Objectives</th>
+	        				<th>Lesson Video</th>
+	        				<th></th>
+	        				<th></th>
+	        			</tr>
+	        		</thead>
+	        		<tbody>
+	        			<c:forEach items="#{courseAction.currentUnit.lessons}" var="lesson">
+	        				<tr>
+	        					<td><h:outputText value="#{lesson.lessonId}"/></td>
+	        					<td><h:outputText value="#{lesson.lessonTitle}"/></td>
+	        					<td><h:outputText value="#{lesson.shortLessonNotes}"/></td>
+	        					<td><h:outputText value="#{lesson.shortLessonObjectives}"/></td>
+	        					<td>
+	        						<a class="img-link" href="http://www.youtube.com/watch?v=#{lesson.lessonVideoId}">
+									<img src="http://img.youtube.com/vi/#{lesson.lessonVideoId}/hqdefault.jpg" height="45" width="70" alt="#{lesson.lessonTitle}"/>
+									</a>
+	        					</td>
+	        					<td>
+	        						<h:commandLink action="#{courseAction.editSelectedLesson}" styleClass="btn btn-small btn-inline">
+	        							<f:setPropertyActionListener target="#{courseAction.selectedLesson}" value="#{lesson.lessonId}"/>
+	        							Edit
+	        						</h:commandLink>
+	        					</td>
+	        					<td>
+	        						<h:commandLink action="#{courseAction.deleteSelectedLesson}" styleClass="btn btn-small btn-inline">
+	        							<f:setPropertyActionListener target="#{courseAction.selectedLesson}" value="#{lesson.lessonId}"/>
+	        							Delete
+	        						</h:commandLink>
+	        					</td>
+	        				</tr>
+	        			</c:forEach>
+	        		</tbody>
+	        	</table>
+        	</form>
 		</ui:define>
 		
 		</ui:composition>

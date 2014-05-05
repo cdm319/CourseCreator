@@ -25,13 +25,13 @@
         			<legend><h2>Unit Details</h2></legend>
         			
         			<label jsf:for="txtUnitTitle">
-        				<span>Course Title</span>
+        				<span>Unit Title</span>
         				<input type="text" jsf:id="txtUnitTitle" placeholder="e.g. Unit 1" jsf:value="#{courseAction.tempUnit.title}"/>
         				<h:message for="txtUnitTitle" styleClass="alert-error"/>
         			</label>
         			
         			<label jsf:for="txtUnitReleaseDate">
-        				<span>Course Start Date (dd/mm/yyyy)</span>
+        				<span>Unit Release Date (dd/mm/yyyy)</span>
         				<input type="date" jsf:id="txtUnitReleaseDate" placeholder="e.g. 01/01/2014" jsf:validator="#{validation.validateDate}" jsf:value="#{courseAction.tempUnitDate}"/>
         				<h:message for="txtUnitReleaseDate" styleClass="alert-error"/>
         			</label>
@@ -41,7 +41,7 @@
         		
         		<fieldset>
         			<input type="submit" class="btn btn-primary" value="Save Changes" jsf:action="#{courseAction.saveUnitChanges}"/>
-					<h:link value="Cancel" outcome="unitDetails" styleClass="btn"/>
+					<h:commandLink action="#{courseAction.cancelEditUnit}" styleClass="btn">Cancel</h:commandLink>
         		</fieldset>
         	</form>
 		</ui:define>

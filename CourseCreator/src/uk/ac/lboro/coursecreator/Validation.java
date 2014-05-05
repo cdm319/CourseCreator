@@ -111,6 +111,7 @@ public class Validation {
 	public void validateDate(FacesContext context, UIComponent component, Object convertedValue) {
 		String stringDate = convertedValue.toString();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		dateFormat.setLenient(false);
 		
 		try {
 			dateFormat.parse(stringDate);

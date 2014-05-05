@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -56,14 +55,17 @@ public class CourseAction implements Serializable {
 	private Part tempLogoImage;
 	private Part tempCoursePptx;
 	
-	//temporary variables for selected unit/lesson IDs
-	private int selectedUnit;
-	private int selectedLesson;
-	
 	//temporary unit details
+	private int selectedUnit;
 	private Unit tempUnit = new Unit();
 	private Unit currentUnit = new Unit();
 	private String tempUnitDate;
+	
+	//temporary lesson details
+	private int selectedLesson;
+	private Lesson tempLesson = new Lesson();
+	private Lesson currentLesson = new Lesson();
+	private String tempLessonVid;
 	
 	/**
 	 * Constructor creates new Course model object if necessary.
@@ -173,6 +175,11 @@ public class CourseAction implements Serializable {
 		return "courseDetails";
 	}
 	
+	/**
+	 * Finds the next unused Unit ID number based on existing units.
+	 * 
+	 * @return	The next available Unit ID
+	 */
 	private int nextAvailableUnitId() {
 		int nextId;
 		
@@ -194,6 +201,75 @@ public class CourseAction implements Serializable {
 		return nextId;
 	}
 	
+	/**
+	 * Finds the next unused Lesson ID number based on existing lessons in the currentUnit object.
+	 * 
+	 * @return	The next available Lesson ID
+	 */
+	private int nextAvailableLessonId() {
+		int nextId;
+		
+		if (currentUnit.getLessons().size() > 0) {
+			int maxExistingId = 0;
+			
+			//loop through every Lesson object, to find the highest Lesson ID
+			for (Lesson lesson : currentUnit.getLessons()) {
+				if (lesson.getLessonId() > maxExistingId) {
+					maxExistingId = lesson.getLessonId();
+				}
+			}
+			
+			nextId = maxExistingId + 1;
+		} else {
+			nextId = 1;
+		}
+		
+		return nextId;
+	}
+	
+	/**
+	 * Handles the creation of a new Lesson object within the currentUnit object through the
+	 * Create Lesson page and adds this to the currentUnit object's list of lessons.
+	 * 
+	 * @return	Navigation rule to Unit Details page of currentUnit
+	 */
+	public String createLesson() {
+		//set the new Lesson ID number
+		tempLesson.setLessonId(nextAvailableLessonId());
+		
+		//convert tempLessonVid to YouTube Video ID only
+		Matcher ytMatch = YOUTUBE_REGEX.matcher(tempLessonVid);
+		
+		if (ytMatch.matches() && (ytMatch.group(1).length() == 11)) {
+			String youtubeId = ytMatch.group(1);
+			tempLesson.setLessonVideoId(youtubeId);
+		}
+		
+		//save new lesson into the currentUnit object and update the Course model
+		List<Lesson> currentLessons = currentUnit.getLessons();
+		currentLessons.add(tempLesson);
+		currentUnit.setLessons(currentLessons);
+		
+		//replace the old currentUnit in the Course model with the new currentUnit
+		for (int i=0; i < course.getUnits().size(); i++) {
+			if (course.getUnits().get(i).getUnitId() == currentUnit.getUnitId()) {
+				//this is the Unit object to replace
+				course.getUnits().set(i, currentUnit);
+			}
+		}
+		
+		tempLesson = new Lesson();
+		tempLessonVid = null;
+		
+		return "unitDetails";
+	}
+	
+	/**
+	 * Handles the creation of a new Unit object through the Create Unit screen and adds
+	 * this to the Course's list of units.
+	 * 
+	 * @return	Navigation rule to Unit Details page of newly created Unit object
+	 */
 	public String createUnit() {
 		//set the new Unit ID number
 		tempUnit.setUnitId(nextAvailableUnitId());
@@ -236,6 +312,11 @@ public class CourseAction implements Serializable {
 		return "unitDetails";
 	}
 	
+	/**
+	 * Sets up temporary variables for the Edit Unit screen, before navigating to said screen.
+	 * 
+	 * @return	Navigation rule to the Edit Unit page
+	 */
 	public String editCurrentUnit() {
 		tempUnit = currentUnit;
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -244,6 +325,26 @@ public class CourseAction implements Serializable {
 		return "unitEdit";
 	}
 	
+	/**
+	 * Resets the temporary variables from the Edit Unit screen upon the user clicking the 
+	 * cancel button.
+	 * 
+	 * @return	Navigation rule to the Unit Details page
+	 */
+	public String cancelEditUnit() {
+		tempUnit = new Unit();
+		tempUnitDate = null;
+		
+		return "unitDetails";
+	}
+	
+	/**
+	 * Handles the saving of data from the Edit Unit page, once the user has made some changes
+	 * to the Unit object.  Differs from the createUnit() method as it directly edits an existing
+	 * Unit object saved in the Course's list of Units.
+	 * 
+	 * @return	Navigation rule to the Unit Details page
+	 */
 	public String saveUnitChanges() {
 		//convert tempUnitDate to Date format, set the new Unit Release Date and Now Available variables
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
@@ -287,6 +388,69 @@ public class CourseAction implements Serializable {
 		return "unitDetails";
 	}
 	
+	/**
+	 * Sets the temporary Lesson object using the user selected Lesson ID, then navigates to the
+	 * Edit Lesson page.
+	 * 
+	 * @return	Navigation rule to the Edit Lesson page
+	 */
+	public String editSelectedLesson() {
+		List<Lesson> lessons = currentUnit.getLessons();
+		
+		for (Lesson lesson : lessons) {
+			if (lesson.getLessonId() == selectedLesson) {
+				tempLesson = lesson;
+			}
+		}
+		
+		tempLessonVid = "http://www.youtube.com/watch?v=" + tempLesson.getLessonVideoId();
+		
+		return "lessonEdit";
+	}
+	
+	/**
+	 * Deletes a Lesson object from the currentUnit's list of lessons after the user clicks
+	 * on the delete button on the Unit Details page.
+	 * 
+	 * @return	Navigation rule to the Unit Details page
+	 */
+	public String deleteSelectedLesson() {
+		List<Lesson> lessons = currentUnit.getLessons();
+		
+		//search for the selected lesson object
+		for (int i=0; i < lessons.size(); i++) {
+			if (lessons.get(i).getLessonId() == selectedLesson) {
+				//delete the selected lesson object
+				lessons.remove(i);
+			}
+		}
+		
+		//reset the remaining lesson objects into a sequential list
+		for (Lesson lesson : lessons) {
+			int currentId = lesson.getLessonId();
+			if (currentId > selectedLesson) {
+				lesson.setLessonId(currentId-1);
+			}
+		}
+		
+		//replace the old currentUnit in the Course model with the new currentUnit
+		for (int i=0; i < course.getUnits().size(); i++) {
+			if (course.getUnits().get(i).getUnitId() == currentUnit.getUnitId()) {
+				//this is the Unit object to replace
+				course.getUnits().set(i, currentUnit);
+			}
+		}
+		
+		//reset the selected lesson ID to 0, then refresh the Unit Details page
+		selectedLesson = 0;
+		return "unitDetails";
+	}
+	
+	/**
+	 * Sets the selected unit details into memory before navigating to that Unit's details.
+	 * 
+	 * @return	Navigation rule to the Unit Details page
+	 */
 	public String showSelectedUnit() {
 		List<Unit> units = course.getUnits();
 		
@@ -299,6 +463,12 @@ public class CourseAction implements Serializable {
 		return "unitDetails";
 	}
 	
+	/**
+	 * Deletes a Unit object from the Course's list of Units after the user clicks on
+	 * the delete button on the Course Details page.
+	 * 
+	 * @return	Navigation rule to the Course Details page
+	 */
 	public String deleteSelectedUnit() {
 		List<Unit> units = course.getUnits();
 		
@@ -402,5 +572,29 @@ public class CourseAction implements Serializable {
 
 	public void setCurrentUnit(Unit currentUnit) {
 		this.currentUnit = currentUnit;
+	}
+
+	public Lesson getCurrentLesson() {
+		return currentLesson;
+	}
+
+	public void setCurrentLesson(Lesson currentLesson) {
+		this.currentLesson = currentLesson;
+	}
+
+	public String getTempLessonVid() {
+		return tempLessonVid;
+	}
+
+	public void setTempLessonVid(String tempLessonVid) {
+		this.tempLessonVid = tempLessonVid;
+	}
+
+	public Lesson getTempLesson() {
+		return tempLesson;
+	}
+
+	public void setTempLesson(Lesson tempLesson) {
+		this.tempLesson = tempLesson;
 	}
 }

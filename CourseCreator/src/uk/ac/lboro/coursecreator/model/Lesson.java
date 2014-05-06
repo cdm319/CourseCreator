@@ -45,7 +45,11 @@ public class Lesson {
 	 */
 	public String getShortLessonNotes() {
 		String notes = lessonNotes;
-		return notes.substring(0, 116) + "...";
+		if (notes.length() > 119) {
+			return notes.substring(0, 116) + "...";
+		} else {
+			return notes;
+		}
 	}
 	
 	/**
@@ -56,7 +60,11 @@ public class Lesson {
 	 */
 	public String getShortLessonObjectives() {
 		String objs = lessonObjectives;
-		return objs.substring(0, 116) + "...";
+		if (objs.length() > 79) {
+			return objs.substring(0, 76) + "...";
+		} else {
+			return objs;
+		}
 	}
 	
 	//Getters and setters

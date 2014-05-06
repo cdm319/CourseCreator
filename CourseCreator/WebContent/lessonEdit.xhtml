@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+	<head jsf:id="head">
+		
+	</head>
+	<body jsf:id="body">
+		<ui:composition template="./template.xhtml">
+		
+		<ui:define name="title">Edit Lesson | CourseCreator</ui:define>
+		
+		<ui:define name="nav">
+			<li class="list-heading active"><a href="courseDetails.jsf">Course Details</a></li>
+        	<li class="list-heading"><a href="index.jsf">Quit</a></li>
+		</ui:define>
+		
+		<ui:define name="pageTitle">Edit Lesson</ui:define>
+		
+		<ui:define name="content">
+			<p>
+	        	Please use the form below to update the details for the #{courseAction.tempLesson.title} Lesson in the <i>#{courseAction.currentUnit.title}</i> Unit for the #{courseAction.course.title} MOOC.
+        	</p>
+        	
+        	<form jsf:id="frmEditLesson">
+        		<fieldset>
+        			<legend><h2>Lesson Details</h2></legend>
+        			
+        			<label jsf:for="txtLessonTitle">
+        				<span>Lesson Title</span>
+        				<input type="text" jsf:id="txtLessonTitle" placeholder="e.g. Lesson 1" jsf:value="#{courseAction.tempLesson.lessonTitle}"/>
+        				<h:message for="txtLessonTitle" styleClass="alert-error"/>
+        			</label>
+        			
+        			<label jsf:for="txtLessonVideo">
+        				<span>Lesson Video URL</span>
+        				<input type="text" jsf:id="txtLessonVideo" placeholder="e.g. http://www.youtube.com/watch?v=Jwj2l3yl27E" jsf:validator="#{validation.validateYouTubeURL}" jsf:value="#{courseAction.tempLessonVid}"/>
+        				<h:message for="txtLessonVideo" styleClass="alert-error"/>
+        			</label>
+        			
+        			<label jsf:for="txtLessonNotes">
+        				<span>Lesson Notes</span>
+        				<textarea jsf:id="txtLessonNotes" placeholder="e.g. Lesson 1" jsf:value="#{courseAction.tempLesson.lessonNotes}"></textarea>
+        				<h:message for="txtLessonNotes" styleClass="alert-error"/>
+        			</label>
+        			
+        			<label jsf:for="txtLessonObjectives">
+        				<span>Lesson Objectives</span>
+        				<textarea jsf:id="txtLessonObjectives" placeholder="e.g. Lesson 1" jsf:value="#{courseAction.tempLesson.lessonObjectives}"></textarea>
+        				<h:message for="txtLessonObjectives" styleClass="alert-error"/>
+        			</label>
+        		</fieldset>
+        		
+        		<h:messages style="display: none;"></h:messages>
+        		
+        		<fieldset>
+        			<input type="submit" class="btn btn-primary" value="Save Changes" jsf:action="#{courseAction.saveLessonChanges}"/>
+					<h:commandLink action="#{courseAction.cancelEditLesson}" styleClass="btn">Cancel</h:commandLink>
+        		</fieldset>
+        	</form>
+		</ui:define>
+		
+		</ui:composition>
+	</body>
+</html>

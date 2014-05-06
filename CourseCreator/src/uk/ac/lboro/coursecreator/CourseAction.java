@@ -64,7 +64,6 @@ public class CourseAction implements Serializable {
 	//temporary lesson details
 	private int selectedLesson;
 	private Lesson tempLesson = new Lesson();
-	private Lesson currentLesson = new Lesson();
 	private String tempLessonVid;
 	
 	/**
@@ -74,48 +73,6 @@ public class CourseAction implements Serializable {
 		if(course == null) {
 			course = new Course();
 		}
-	}
-	
-	/**
-	 * Method to handle the form data from the Import Course page and upload
-	 * the corresponding .pptx file for processing.
-	 * 
-	 * @return The navigation rule to the Edit Course page.
-	 */
-	public String importCoursePptx() {
-		if(tempCoursePptx != null && tempCoursePptx.getSize() != 0) {
-			try {
-				File pptxFile = File.createTempFile("course", ".pptx");
-				tempCoursePptx.write(pptxFile.getAbsolutePath());
-				
-				XMLSlideShow pptx = new XMLSlideShow(new FileInputStream(pptxFile));
-				Course importedCourse = Powerpoint.parseCoursePresentation(pptx);
-				
-				course.setTitle(importedCourse.getTitle());
-				course.setBlurb(importedCourse.getBlurb());
-				course.setStartDate(importedCourse.getStartDate());
-				course.setIntroVideoId(importedCourse.getIntroVideoId());
-				course.setForumURL(importedCourse.getForumURL());
-				course.setInstitutionName(importedCourse.getInstitutionName());
-				course.setInstitutionURL(importedCourse.getInstitutionURL());
-				course.setInstitutionLogo(importedCourse.getInstitutionLogo());
-				course.setAdministratorName(importedCourse.getAdministratorName());
-				course.setAdministratorEmail(importedCourse.getAdministratorEmail());
-				
-				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-				tempDate = df.format(course.getStartDate());
-				
-				tempIntroVid = "http://www.youtube.com/watch?v=" + course.getIntroVideoId();
-				
-				pptxFile.delete();
-			} catch (IOException e) {
-				throw new ValidatorException(new FacesMessage("Invalid PowerPoint file detected."));
-			}
-		} else {
-			throw new ValidatorException(new FacesMessage("Invalid PowerPoint file detected."));
-		}
-		
-		return "courseEdit";
 	}
 	
 	/**
@@ -176,92 +133,45 @@ public class CourseAction implements Serializable {
 	}
 	
 	/**
-	 * Finds the next unused Unit ID number based on existing units.
+	 * Method to handle the form data from the Import Course page and upload
+	 * the corresponding .pptx file for processing.
 	 * 
-	 * @return	The next available Unit ID
+	 * @return The navigation rule to the Edit Course page.
 	 */
-	private int nextAvailableUnitId() {
-		int nextId;
-		
-		if (course.getUnits().size() > 0) {
-			int maxExistingId = 0;
-			
-			//loop through every Unit object, to find the highest Unit ID
-			for (Unit unit : course.getUnits()) {
-				if (unit.getUnitId() > maxExistingId) {
-					maxExistingId = unit.getUnitId();
-				}
+	public String importCoursePptx() {
+		if(tempCoursePptx != null && tempCoursePptx.getSize() != 0) {
+			try {
+				File pptxFile = File.createTempFile("course", ".pptx");
+				tempCoursePptx.write(pptxFile.getAbsolutePath());
+				
+				XMLSlideShow pptx = new XMLSlideShow(new FileInputStream(pptxFile));
+				Course importedCourse = Powerpoint.parseCoursePresentation(pptx);
+				
+				course.setTitle(importedCourse.getTitle());
+				course.setBlurb(importedCourse.getBlurb());
+				course.setStartDate(importedCourse.getStartDate());
+				course.setIntroVideoId(importedCourse.getIntroVideoId());
+				course.setForumURL(importedCourse.getForumURL());
+				course.setInstitutionName(importedCourse.getInstitutionName());
+				course.setInstitutionURL(importedCourse.getInstitutionURL());
+				course.setInstitutionLogo(importedCourse.getInstitutionLogo());
+				course.setAdministratorName(importedCourse.getAdministratorName());
+				course.setAdministratorEmail(importedCourse.getAdministratorEmail());
+				
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+				tempDate = df.format(course.getStartDate());
+				
+				tempIntroVid = "http://www.youtube.com/watch?v=" + course.getIntroVideoId();
+				
+				pptxFile.delete();
+			} catch (IOException e) {
+				throw new ValidatorException(new FacesMessage("Invalid PowerPoint file detected."));
 			}
-			
-			nextId = maxExistingId + 1;
 		} else {
-			nextId = 1;
+			throw new ValidatorException(new FacesMessage("Invalid PowerPoint file detected."));
 		}
 		
-		return nextId;
-	}
-	
-	/**
-	 * Finds the next unused Lesson ID number based on existing lessons in the currentUnit object.
-	 * 
-	 * @return	The next available Lesson ID
-	 */
-	private int nextAvailableLessonId() {
-		int nextId;
-		
-		if (currentUnit.getLessons().size() > 0) {
-			int maxExistingId = 0;
-			
-			//loop through every Lesson object, to find the highest Lesson ID
-			for (Lesson lesson : currentUnit.getLessons()) {
-				if (lesson.getLessonId() > maxExistingId) {
-					maxExistingId = lesson.getLessonId();
-				}
-			}
-			
-			nextId = maxExistingId + 1;
-		} else {
-			nextId = 1;
-		}
-		
-		return nextId;
-	}
-	
-	/**
-	 * Handles the creation of a new Lesson object within the currentUnit object through the
-	 * Create Lesson page and adds this to the currentUnit object's list of lessons.
-	 * 
-	 * @return	Navigation rule to Unit Details page of currentUnit
-	 */
-	public String createLesson() {
-		//set the new Lesson ID number
-		tempLesson.setLessonId(nextAvailableLessonId());
-		
-		//convert tempLessonVid to YouTube Video ID only
-		Matcher ytMatch = YOUTUBE_REGEX.matcher(tempLessonVid);
-		
-		if (ytMatch.matches() && (ytMatch.group(1).length() == 11)) {
-			String youtubeId = ytMatch.group(1);
-			tempLesson.setLessonVideoId(youtubeId);
-		}
-		
-		//save new lesson into the currentUnit object and update the Course model
-		List<Lesson> currentLessons = currentUnit.getLessons();
-		currentLessons.add(tempLesson);
-		currentUnit.setLessons(currentLessons);
-		
-		//replace the old currentUnit in the Course model with the new currentUnit
-		for (int i=0; i < course.getUnits().size(); i++) {
-			if (course.getUnits().get(i).getUnitId() == currentUnit.getUnitId()) {
-				//this is the Unit object to replace
-				course.getUnits().set(i, currentUnit);
-			}
-		}
-		
-		tempLesson = new Lesson();
-		tempLessonVid = null;
-		
-		return "unitDetails";
+		return "courseEdit";
 	}
 	
 	/**
@@ -306,32 +216,6 @@ public class CourseAction implements Serializable {
 		
 		//set the currently opened Unit and reset the temporary Unit model
 		currentUnit = tempUnit;
-		tempUnit = new Unit();
-		tempUnitDate = null;
-		
-		return "unitDetails";
-	}
-	
-	/**
-	 * Sets up temporary variables for the Edit Unit screen, before navigating to said screen.
-	 * 
-	 * @return	Navigation rule to the Edit Unit page
-	 */
-	public String editCurrentUnit() {
-		tempUnit = currentUnit;
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		tempUnitDate = df.format(tempUnit.getReleaseDate());
-		
-		return "unitEdit";
-	}
-	
-	/**
-	 * Resets the temporary variables from the Edit Unit screen upon the user clicking the 
-	 * cancel button.
-	 * 
-	 * @return	Navigation rule to the Unit Details page
-	 */
-	public String cancelEditUnit() {
 		tempUnit = new Unit();
 		tempUnitDate = null;
 		
@@ -389,6 +273,184 @@ public class CourseAction implements Serializable {
 	}
 	
 	/**
+	 * Sets the selected unit details into memory before navigating to that Unit's details.
+	 * 
+	 * @return	Navigation rule to the Unit Details page
+	 */
+	public String showSelectedUnit() {
+		List<Unit> units = course.getUnits();
+		
+		for (Unit unit : units) {
+			if (unit.getUnitId() == selectedUnit) {
+				currentUnit = unit;
+			}
+		}
+		
+		return "unitDetails";
+	}
+	
+	/**
+	 * Sets up temporary variables for the Edit Unit screen, before navigating to said screen.
+	 * 
+	 * @return	Navigation rule to the Edit Unit page
+	 */
+	public String editCurrentUnit() {
+		tempUnit = currentUnit;
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		tempUnitDate = df.format(tempUnit.getReleaseDate());
+		
+		return "unitEdit";
+	}
+	
+	/**
+	 * Resets the temporary variables from the Edit Unit screen upon the user clicking the 
+	 * cancel button.
+	 * 
+	 * @return	Navigation rule to the Unit Details page
+	 */
+	public String cancelEditUnit() {
+		tempUnit = new Unit();
+		tempUnitDate = null;
+		
+		return "unitDetails";
+	}
+	
+	/**
+	 * Deletes a Unit object from the Course's list of Units after the user clicks on
+	 * the delete button on the Course Details page.
+	 * 
+	 * @return	Navigation rule to the Course Details page
+	 */
+	public String deleteSelectedUnit() {
+		List<Unit> units = course.getUnits();
+		
+		//search for the selected unit object
+		for (int i=0; i < units.size(); i++) {
+			if (units.get(i).getUnitId() == selectedUnit) {
+				//delete the selected unit object
+				units.remove(i);
+			}
+		}
+		
+		//reset the remaining Unit IDs into a sequential list
+		for (Unit unit : units) {
+			int currentId = unit.getUnitId();
+			if (currentId > selectedUnit) {
+				unit.setUnitId(currentId-1);
+			}
+		}
+		
+		//reset the selectedUnit ID to 0, then refresh the Course Details page
+		selectedUnit = 0;
+		return "courseDetails";
+	}
+	
+	/**
+	 * Finds the next unused Unit ID number based on existing units.
+	 * 
+	 * @return	The next available Unit ID
+	 */
+	private int nextAvailableUnitId() {
+		int nextId;
+		
+		if (course.getUnits().size() > 0) {
+			int maxExistingId = 0;
+			
+			//loop through every Unit object, to find the highest Unit ID
+			for (Unit unit : course.getUnits()) {
+				if (unit.getUnitId() > maxExistingId) {
+					maxExistingId = unit.getUnitId();
+				}
+			}
+			
+			nextId = maxExistingId + 1;
+		} else {
+			nextId = 1;
+		}
+		
+		return nextId;
+	}
+	
+	/**
+	 * Handles the creation of a new Lesson object within the currentUnit object through the
+	 * Create Lesson page and adds this to the currentUnit object's list of lessons.
+	 * 
+	 * @return	Navigation rule to Unit Details page of currentUnit
+	 */
+	public String createLesson() {
+		//set the new Lesson ID number
+		tempLesson.setLessonId(nextAvailableLessonId());
+		
+		//convert tempLessonVid to YouTube Video ID only
+		Matcher ytMatch = YOUTUBE_REGEX.matcher(tempLessonVid);
+		
+		if (ytMatch.matches() && (ytMatch.group(1).length() == 11)) {
+			String youtubeId = ytMatch.group(1);
+			tempLesson.setLessonVideoId(youtubeId);
+		}
+		
+		//save new lesson into the currentUnit object and update the Course model
+		List<Lesson> currentLessons = currentUnit.getLessons();
+		currentLessons.add(tempLesson);
+		currentUnit.setLessons(currentLessons);
+		
+		//replace the old currentUnit in the Course model with the new currentUnit
+		for (int i=0; i < course.getUnits().size(); i++) {
+			if (course.getUnits().get(i).getUnitId() == currentUnit.getUnitId()) {
+				//this is the Unit object to replace
+				course.getUnits().set(i, currentUnit);
+			}
+		}
+		
+		tempLesson = new Lesson();
+		tempLessonVid = null;
+		
+		return "unitDetails";
+	}
+	
+	/**
+	 * Handles the saving of data from the Edit Lesson page. Differs from the createLesson()
+	 * method as it doesn't assign a new Lesson ID number and it directly edits the existing
+	 * Lesson object in the currentUnit.
+	 * 
+	 * @return	Navigation rule to the Unit Details page
+	 */
+	public String saveLessonChanges() {
+		//convert tempLessonVid to YouTube Video ID only
+		Matcher ytMatch = YOUTUBE_REGEX.matcher(tempLessonVid);
+		
+		if (ytMatch.matches() && (ytMatch.group(1).length() == 11)) {
+			String youtubeId = ytMatch.group(1);
+			tempLesson.setLessonVideoId(youtubeId);
+		}
+		
+		//get current lesson object, directly update it
+		for (int i=0; i < currentUnit.getLessons().size(); i++) {
+			if (currentUnit.getLessons().get(i).getLessonId() == tempLesson.getLessonId()) {
+				//this is the Lesson object to edit
+				currentUnit.getLessons().get(i).setLessonTitle(tempLesson.getLessonTitle());
+				currentUnit.getLessons().get(i).setLessonVideoId(tempLesson.getLessonVideoId());
+				currentUnit.getLessons().get(i).setLessonNotes(tempLesson.getLessonNotes());
+				currentUnit.getLessons().get(i).setLessonObjectives(tempLesson.getLessonObjectives());
+			}
+		}
+		
+		//replace the old currentUnit in the Course model with the new currentUnit
+		for (int i=0; i < course.getUnits().size(); i++) {
+			if (course.getUnits().get(i).getUnitId() == currentUnit.getUnitId()) {
+				//this is the Unit object to replace
+				course.getUnits().set(i, currentUnit);
+			}
+		}
+		
+		//reset the temporary variables
+		tempLesson = new Lesson();
+		tempLessonVid = null;
+		
+		return "unitDetails";
+	}
+	
+	/**
 	 * Sets the temporary Lesson object using the user selected Lesson ID, then navigates to the
 	 * Edit Lesson page.
 	 * 
@@ -406,6 +468,19 @@ public class CourseAction implements Serializable {
 		tempLessonVid = "http://www.youtube.com/watch?v=" + tempLesson.getLessonVideoId();
 		
 		return "lessonEdit";
+	}
+	
+	/**
+	 * Resets the temporary variables from the Edit Lesson screen upon the user clicking the 
+	 * cancel button.
+	 * 
+	 * @return	Navigation rule to the Unit Details page
+	 */
+	public String cancelEditLesson() {
+		tempLesson = new Lesson();
+		tempLessonVid = null;
+		
+		return "unitDetails";
 	}
 	
 	/**
@@ -447,50 +522,29 @@ public class CourseAction implements Serializable {
 	}
 	
 	/**
-	 * Sets the selected unit details into memory before navigating to that Unit's details.
+	 * Finds the next unused Lesson ID number based on existing lessons in the currentUnit object.
 	 * 
-	 * @return	Navigation rule to the Unit Details page
+	 * @return	The next available Lesson ID
 	 */
-	public String showSelectedUnit() {
-		List<Unit> units = course.getUnits();
+	private int nextAvailableLessonId() {
+		int nextId;
 		
-		for (Unit unit : units) {
-			if (unit.getUnitId() == selectedUnit) {
-				currentUnit = unit;
+		if (currentUnit.getLessons().size() > 0) {
+			int maxExistingId = 0;
+			
+			//loop through every Lesson object, to find the highest Lesson ID
+			for (Lesson lesson : currentUnit.getLessons()) {
+				if (lesson.getLessonId() > maxExistingId) {
+					maxExistingId = lesson.getLessonId();
+				}
 			}
+			
+			nextId = maxExistingId + 1;
+		} else {
+			nextId = 1;
 		}
 		
-		return "unitDetails";
-	}
-	
-	/**
-	 * Deletes a Unit object from the Course's list of Units after the user clicks on
-	 * the delete button on the Course Details page.
-	 * 
-	 * @return	Navigation rule to the Course Details page
-	 */
-	public String deleteSelectedUnit() {
-		List<Unit> units = course.getUnits();
-		
-		//search for the selected unit object
-		for (int i=0; i < units.size(); i++) {
-			if (units.get(i).getUnitId() == selectedUnit) {
-				//delete the selected unit object
-				units.remove(i);
-			}
-		}
-		
-		//reset the remaining Unit IDs into a sequential list
-		for (Unit unit : units) {
-			int currentId = unit.getUnitId();
-			if (currentId > selectedUnit) {
-				unit.setUnitId(currentId-1);
-			}
-		}
-		
-		//reset the selectedUnit ID to 0, then refresh the Course Details page
-		selectedUnit = 0;
-		return "courseDetails";
+		return nextId;
 	}
 	
 	//Getters and setters
@@ -572,14 +626,6 @@ public class CourseAction implements Serializable {
 
 	public void setCurrentUnit(Unit currentUnit) {
 		this.currentUnit = currentUnit;
-	}
-
-	public Lesson getCurrentLesson() {
-		return currentLesson;
-	}
-
-	public void setCurrentLesson(Lesson currentLesson) {
-		this.currentLesson = currentLesson;
 	}
 
 	public String getTempLessonVid() {

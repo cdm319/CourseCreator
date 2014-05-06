@@ -415,9 +415,9 @@ public class Powerpoint {
 							
 							//if this is the first bullet, add a list tag
 							if (!shapeText.endsWith("</li>")) {
-								shapeText.concat("<ul>");
+								shapeText = shapeText.concat("<ul>");
 							}
-							shapeText.concat("<li>");
+							shapeText = shapeText.concat("<li>");
 							
 							List<XSLFTextRun> spans = para.getTextRuns();
 							for (XSLFTextRun span : spans) {
@@ -435,19 +435,19 @@ public class Powerpoint {
 								if (span.isSubscript()) { text = "<sub>" + text + "</sub>"; }
 								if (span.isSuperscript()) { text = "<sup>" + text + "</sup>"; }
 								
-								shapeText.concat(text);
+								shapeText = shapeText.concat(text);
 							}
 							
-							shapeText.concat("</li>");
+							shapeText = shapeText.concat("</li>");
 						} else {
 							//normal paragraph
 							
 							//if last paragraph was a bullet point, close the list tag
 							if (shapeText.endsWith("</li>")) {
-								shapeText.concat("</ul>");
+								shapeText = shapeText.concat("</ul>");
 							}
 							
-							shapeText.concat("<p>");
+							shapeText = shapeText.concat("<p>");
 							
 							List<XSLFTextRun> spans = para.getTextRuns();
 							for (XSLFTextRun span : spans) {
@@ -465,20 +465,20 @@ public class Powerpoint {
 								if (span.isSubscript()) { text = "<sub>" + text + "</sub>"; }
 								if (span.isSuperscript()) { text = "<sup>" + text + "</sup>"; }
 								
-								shapeText.concat(text);
+								shapeText = shapeText.concat(text);
 							}
 							
-							shapeText.concat("</p>");
+							shapeText = shapeText.concat("</p>");
 						}
 					}
 				}
 				
 				//ensure lists are closed correctly
 				if (shapeText.endsWith("</li>")) {
-					shapeText.concat("</ul>");
+					shapeText = shapeText.concat("</ul>");
 				}
 				
-				html.concat(shapeText);
+				html = html.concat(shapeText);
 			}
 		}
 		
@@ -607,12 +607,12 @@ public class Powerpoint {
 				} else {
 					//these are potential Lesson slides, containing Lesson data
 					
-					if (!title.equals("") && (lastLesson.getLessonTitle().equals(title) || title.contains(lastLesson.getLessonTitle()))) {
+					if (!title.equals("") && !lastLesson.getLessonTitle().equals("") && (lastLesson.getLessonTitle().equals(title) || title.contains(lastLesson.getLessonTitle()))) {
 						//continue with last Lesson object
 						String additionalNotes = convertSlideToHTML(slide);
 						String originalNotes = lastLesson.getLessonNotes();
 						
-						lastLesson.setLessonNotes(originalNotes.concat(additionalNotes));
+						lastLesson.setLessonNotes(originalNotes + additionalNotes);
 					} else {
 						//create new Lesson object
 						Lesson lesson = new Lesson();

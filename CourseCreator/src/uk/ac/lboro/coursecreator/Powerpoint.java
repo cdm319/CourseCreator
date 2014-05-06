@@ -18,6 +18,8 @@ import org.apache.poi.xslf.usermodel.XSLFTextRun;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
 
 import uk.ac.lboro.coursecreator.model.Course;
+import uk.ac.lboro.coursecreator.model.Lesson;
+import uk.ac.lboro.coursecreator.model.Unit;
 
 /**
  * Utility class that parses various data from a Powerpoint presentation using the 
@@ -395,6 +397,94 @@ public class Powerpoint {
 		return longestParagraph;
 	}
 	
+	private static String convertSlideToHTML(XSLFSlide slide) {
+		XSLFShape[] shapes = slide.getShapes();
+		String html = "";
+		
+		//loop through every shape
+		for (XSLFShape shape : shapes) {
+			if (shape instanceof XSLFTextShape) {
+				List<XSLFTextParagraph> paras = ((XSLFTextShape) shape).getTextParagraphs();
+				String shapeText = "";
+				
+				for (XSLFTextParagraph para : paras) {
+					//ignore the title paragraph
+					if (!para.getText().equals(getSlideTitle(slide))) {
+						if (para.isBullet()) {
+							//bullet pointed paragraph
+							
+							//if this is the first bullet, add a list tag
+							if (!shapeText.endsWith("</li>")) {
+								shapeText.concat("<ul>");
+							}
+							shapeText.concat("<li>");
+							
+							List<XSLFTextRun> spans = para.getTextRuns();
+							for (XSLFTextRun span : spans) {
+								String text = span.getText();
+								
+								//check for hyperlink
+								Matcher urlMatch = URL_REGEX.matcher(text);
+								if (urlMatch.matches()) { text = "<a href='" + text + "'>" + text + "</a>"; }
+								
+								//check for formatting
+								if (span.isBold()) { text = "<b>" + text + "</b>"; }
+								if (span.isItalic()) { text = "<i>" + text + "</i>"; }
+								if (span.isUnderline()) { text = "<u>" + text + "</u>"; }
+								if (span.isStrikethrough()) { text = "<s>" + text + "</s>"; }
+								if (span.isSubscript()) { text = "<sub>" + text + "</sub>"; }
+								if (span.isSuperscript()) { text = "<sup>" + text + "</sup>"; }
+								
+								shapeText.concat(text);
+							}
+							
+							shapeText.concat("</li>");
+						} else {
+							//normal paragraph
+							
+							//if last paragraph was a bullet point, close the list tag
+							if (shapeText.endsWith("</li>")) {
+								shapeText.concat("</ul>");
+							}
+							
+							shapeText.concat("<p>");
+							
+							List<XSLFTextRun> spans = para.getTextRuns();
+							for (XSLFTextRun span : spans) {
+								String text = span.getText();
+								
+								//check for hyperlink
+								Matcher urlMatch = URL_REGEX.matcher(text);
+								if (urlMatch.matches()) { text = "<a href='" + text + "'>" + text + "</a>"; }
+								
+								//check for formatting
+								if (span.isBold()) { text = "<b>" + text + "</b>"; }
+								if (span.isItalic()) { text = "<i>" + text + "</i>"; }
+								if (span.isUnderline()) { text = "<u>" + text + "</u>"; }
+								if (span.isStrikethrough()) { text = "<s>" + text + "</s>"; }
+								if (span.isSubscript()) { text = "<sub>" + text + "</sub>"; }
+								if (span.isSuperscript()) { text = "<sup>" + text + "</sup>"; }
+								
+								shapeText.concat(text);
+							}
+							
+							shapeText.concat("</p>");
+						}
+					}
+				}
+				
+				//ensure lists are closed correctly
+				if (shapeText.endsWith("</li>")) {
+					shapeText.concat("</ul>");
+				}
+				
+				html.concat(shapeText);
+			}
+		}
+		
+		return html;
+	}
+	
 	/**
 	 * Method to parse a Course Structure presentation into meaningful data
 	 * and return this in a Course model object.
@@ -459,12 +549,122 @@ public class Powerpoint {
 					course.setAdministratorName(adminDetails.get(0));	//administrator name
 					course.setAdministratorEmail(adminDetails.get(1));	//administrator email address
 				}
-				
-			} else if (i == 1) {
-				//potential timetable slide
 			}
 		}
 		
 		return course;
+	}
+
+	/**
+	 * Method to parse a Unit/Lecture presentation into meaningful data
+	 * and return this in a Unit model object.
+	 * 
+	 * @param 	pptx
+	 * @return	A Unit object containing Unit and Lessons data
+	 */
+	public static Unit parseUnitPresentation(XMLSlideShow pptx, int unitId) {
+		Unit unit = new Unit();
+		XSLFSlide[] slides = pptx.getSlides();
+		
+		Lesson lastLesson = new Lesson();
+		String unitObjectives = "";
+		
+		//set the new Unit's ID to the next available Unit ID number
+		unit.setUnitId(unitId);
+		
+		//loop through every slide in the presentation
+		for (int i=0; i < slides.length; i++) {
+			XSLFSlide slide = slides[i];
+			if (i == 0) {
+				//this is the title slide, containing Unit data
+				
+				//set the Unit title to the title of the first slide
+				unit.setTitle(getSlideTitle(slide));
+				
+				//set the Release Date to the date on the first slide
+				Date date = getDate(slide);
+				unit.setReleaseDate(date);
+				
+				//set the Now Available flag based on the Release Date
+				Date today = new Date();
+				
+				if (date != null) {
+					if (date.after(today)) {
+						unit.setNowAvailable(false);
+					} else {
+						unit.setNowAvailable(true);
+					}
+				} else {
+					unit.setNowAvailable(false);
+				}
+			} else {
+				//get the slide title
+				String title = getSlideTitle(slide);
+				
+				if (isObjectives(title)) {
+					//Unit objectives slide
+					unitObjectives = convertSlideToHTML(slide);
+				} else {
+					//these are potential Lesson slides, containing Lesson data
+					
+					if (!title.equals("") && (lastLesson.getLessonTitle().equals(title) || title.contains(lastLesson.getLessonTitle()))) {
+						//continue with last Lesson object
+						String additionalNotes = convertSlideToHTML(slide);
+						String originalNotes = lastLesson.getLessonNotes();
+						
+						lastLesson.setLessonNotes(originalNotes.concat(additionalNotes));
+					} else {
+						//create new Lesson object
+						Lesson lesson = new Lesson();
+						
+						//set the Lesson ID
+						lesson.setLessonId(lastLesson.getLessonId() + 1);
+						
+						//set the Lesson Title
+						lesson.setLessonTitle(title);
+						
+						//set the Lesson Video ID, if none is found, use the previous Lesson's video
+						String videoId = getYouTubeVideoID(slide);
+						if (null != videoId) {
+							lesson.setLessonVideoId(videoId);
+						} else {
+							lesson.setLessonVideoId(lastLesson.getLessonVideoId());
+						}
+						
+						//set the Lesson Notes
+						lesson.setLessonNotes(convertSlideToHTML(slide));
+						
+						//set the Lesson Objectives to the overall Unit objectives
+						lesson.setLessonObjectives(unitObjectives);
+						
+						//add the Lesson object to the Unit object
+						unit.getLessons().add(lesson);
+						lastLesson = lesson;
+					}
+				}
+			}
+		}
+		
+		return unit;
+	}
+
+	/**
+	 * Checks whether a given string contains words relating to objectives.
+	 * 
+	 * @param 	title
+	 * @return	Whether the string contains objective related words
+	 */
+	private static boolean isObjectives(String title) {
+		List<String> words = new ArrayList<String>();
+		words.add("Objectives");
+		words.add("Learning Outcomes");
+		
+		for (String word : words) {
+			if (title.toLowerCase().contains(word.toLowerCase())) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

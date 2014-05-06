@@ -54,6 +54,7 @@ public class CourseAction implements Serializable {
 	//temporary file upload variables
 	private Part tempLogoImage;
 	private Part tempCoursePptx;
+	private Part tempUnitPptx;
 	
 	//temporary unit details
 	private int selectedUnit;
@@ -219,6 +220,43 @@ public class CourseAction implements Serializable {
 		tempUnit = new Unit();
 		tempUnitDate = null;
 		
+		return "unitDetails";
+	}
+	
+	/**
+	 * Method to handle the form data from the Import Unit page and upload
+	 * the corresponding .pptx file for processing.
+	 * 
+	 * @return The navigation rule to the Unit Details page.
+	 */
+	public String importUnitPptx() {
+		//ensure that a file has been uploaded
+		if(tempUnitPptx != null && tempUnitPptx.getSize() != 0) {
+			try {
+				//create a temporary file
+				File pptxFile = File.createTempFile("unit", ".pptx");
+				tempUnitPptx.write(pptxFile.getAbsolutePath());
+				
+				//import PowerPoint presentation
+				XMLSlideShow pptx = new XMLSlideShow(new FileInputStream(pptxFile));
+				
+				//parse PowerPoint presentation into a Unit object
+				Unit importedUnit = Powerpoint.parseUnitPresentation(pptx, nextAvailableUnitId());
+				
+				//add the new Unit to the Course model and set the currentUnit object
+				course.getUnits().add(importedUnit);
+				currentUnit = importedUnit;
+				
+				//delete the temporary file
+				pptxFile.delete();
+			} catch (IOException e) {
+				throw new ValidatorException(new FacesMessage("Invalid PowerPoint file detected."));
+			}
+		} else {
+			throw new ValidatorException(new FacesMessage("Invalid PowerPoint file detected."));
+		}
+		
+		//navigate to Unit Details page of newly imported Unit
 		return "unitDetails";
 	}
 	
@@ -642,5 +680,13 @@ public class CourseAction implements Serializable {
 
 	public void setTempLesson(Lesson tempLesson) {
 		this.tempLesson = tempLesson;
+	}
+
+	public Part getTempUnitPptx() {
+		return tempUnitPptx;
+	}
+
+	public void setTempUnitPptx(Part tempUnitPptx) {
+		this.tempUnitPptx = tempUnitPptx;
 	}
 }

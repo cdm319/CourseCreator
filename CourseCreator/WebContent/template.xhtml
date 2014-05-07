@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:ui="http://java.sun.com/jsf/facelets">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html">
 	<head jsf:id="head">
 		<meta charset="utf-8"/>
 		<meta name="description" content="CourseCreator allows you to create multi-platform MOOC content from Microsoft PowerPoint presentations."/>
@@ -14,6 +14,7 @@
         
         <script jsf:name="js/jquery.min.js"></script>
         <script>window.jQuery || alert("No jQuery loaded.");</script>
+        <script jsf:name="js/nav.min.js"></script>
         <ui:insert name="extraJs"></ui:insert>
 	</head>
 	<body jsf:id="body">
@@ -33,7 +34,9 @@
         		</ul>
         	</nav>
         	<div class="sidebar-footer">
-        		Copyright &#169; 2014 Chris Matthews.<br/>All rights reserved.
+        		<h:graphicImage style="float: left; margin-right: 8px;" library="img" name="lboromini.png" width="28" height="32" alt="Loughborough University"/>
+        		<div style="float: left;">A Loughborough University Project.<br/>Copyright &#169; 2014 Chris Matthews.</div>
+        		<div style="clear:both;"></div>
         	</div>
         </section>
         

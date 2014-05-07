@@ -424,8 +424,9 @@ public class Powerpoint {
 								String text = span.getText();
 								
 								//check for hyperlink
+								//TODO YouTube links appear to span multiple TextRuns, ignore for the moment
 								Matcher urlMatch = URL_REGEX.matcher(text);
-								if (urlMatch.matches()) { text = "<a href='" + text + "'>" + text + "</a>"; }
+								if (urlMatch.matches()) { text = "<a href='" + urlMatch.group() + "'>" + urlMatch.group() + "</a>"; }
 								
 								//check for formatting
 								if (span.isBold()) { text = "<b>" + text + "</b>"; }

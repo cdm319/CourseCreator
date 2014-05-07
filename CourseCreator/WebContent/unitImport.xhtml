@@ -13,7 +13,24 @@
 		</ui:define>
 		
 		<ui:define name="nav">
-			<li class="list-heading active"><a href="courseDetails.jsf">Course Details</a></li>
+			<li class="list-heading"><a href="courseDetails.jsf">Course Details</a></li>
+			<c:if test="#{not empty courseAction.course.units}">
+			<li class="list-heading list-disabled active">Units
+				<ul id="unitNavList">
+					<c:forEach items="#{courseAction.course.units}" var="unit">
+						<li>
+							<form jsf:id="frmMenu#{unit.unitId}" style="margin:0; padding:0;">
+							<h:commandLink action="#{courseAction.showSelectedUnit}">
+								<f:setPropertyActionListener target="#{courseAction.selectedUnit}" value="#{unit.unitId}"/>
+								<h:outputText value="#{unit.unitId}. #{unit.title}"/>
+							</h:commandLink>
+							</form>
+						</li>
+					</c:forEach>
+				</ul>
+			</li>
+			</c:if>
+			
         	<li class="list-heading"><a href="index.jsf">Quit</a></li>
 		</ui:define>
 		

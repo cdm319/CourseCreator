@@ -60,9 +60,13 @@ html, body {
 		width: 100%;
 		margin: 0;
 		padding: 0;
+		position: absolute;
+		top: 180px;
+		bottom: 72px;
 		font-size: 1.2em;
 		color: lighten(@navy, 20%);
 		font-weight: 300;
+		overflow-y: scroll;
 		
 		ul {
 			margin: 0;
@@ -95,6 +99,15 @@ html, body {
 			li:hover, li.active {
 				color: #fafafa;
 				background: darken(@navy, 10%);
+			}
+			
+			li.list-disabled {
+				cursor: default;
+			}
+			
+			li.list-disabled:hover, li.list-disabled:active {
+				color: lighten(@navy, 20%);
+				background: transparent;
 			}
 			
 			li.list-heading {

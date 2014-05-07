@@ -78,9 +78,9 @@
 	        			<c:forEach items="#{courseAction.currentUnit.lessons}" var="lesson">
 	        				<tr>
 	        					<td><h:outputText value="#{lesson.lessonId}"/></td>
-	        					<td><h:outputText value="#{lesson.lessonTitle}"/></td>
-	        					<td><h:outputText value="#{lesson.shortLessonNotes}"/></td>
-	        					<td><h:outputText value="#{lesson.shortLessonObjectives}"/></td>
+	        					<td style="text-align:left;"><h:outputText value="#{lesson.lessonTitle}"/></td>
+	        					<td><h:outputText value="#{lesson.shortLessonNotes}" escape="false"/></td>
+	        					<td><h:outputText value="#{lesson.shortLessonObjectives}" escape="false"/></td>
 	        					<td>
 	        						<a class="img-link" href="http://www.youtube.com/watch?v=#{lesson.lessonVideoId}">
 									<img src="http://img.youtube.com/vi/#{lesson.lessonVideoId}/hqdefault.jpg" height="45" width="70" alt="#{lesson.lessonTitle}"/>

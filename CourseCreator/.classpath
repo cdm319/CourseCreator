@@ -29,5 +29,6 @@
 	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/poi-scratchpad-3.10-FINAL-20140208.jar"/>
 	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/stax-api-1.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/xmlbeans-2.3.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/yamlbeans-1.06.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

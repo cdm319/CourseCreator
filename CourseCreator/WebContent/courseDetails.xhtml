@@ -13,6 +13,7 @@
 		</ui:define>
 		
 		<ui:define name="nav">
+			<li class="list-heading" jsf:rendered="#{not empty courseAction.course.units}"><a href="export.jsf">Export Course</a></li>
 			<li class="list-heading active"><a href="courseDetails.jsf">Course Details</a></li>
 			<c:if test="#{not empty courseAction.course.units}">
 			<li class="list-heading list-disabled">Units

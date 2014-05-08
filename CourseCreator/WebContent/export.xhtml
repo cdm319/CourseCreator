@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<head jsf:id="head">
+		
+	</head>
+	<body jsf:id="body">
+		<ui:composition template="./template.xhtml">
+		
+		<ui:define name="title">Export Course | CourseCreator</ui:define>
+		
+		<ui:define name="extraJs">
+			
+		</ui:define>
+		
+		<ui:define name="nav">
+			<li class="list-heading active"><a href="courseDetails.jsf">Course Details</a></li>
+			<c:if test="#{not empty courseAction.course.units}">
+			<li class="list-heading list-disabled">Units
+				<ul id="unitNavList">
+					<c:forEach items="#{courseAction.course.units}" var="unit">
+						<li>
+							<form jsf:id="frmMenu#{unit.unitId}" style="margin:0; padding:0;">
+							<h:commandLink action="#{courseAction.showSelectedUnit}">
+								<f:setPropertyActionListener target="#{courseAction.selectedUnit}" value="#{unit.unitId}"/>
+								<h:outputText value="#{unit.unitId}. #{unit.title}"/>
+							</h:commandLink>
+							</form>
+						</li>
+					</c:forEach>
+				</ul>
+			</li>
+			</c:if>
+			
+        	<li class="list-heading"><a href="index.jsf">Quit</a></li>
+		</ui:define>
+		
+		<ui:define name="pageTitle">Export to Google CourseBuilder</ui:define>
+		
+		<ui:define name="content">
+			<p>
+	        	Please download the files below and place these in your CourseBuilder installation directory, replacing any existing files.
+        	</p>
+        	<form jsf:id="frmExport">
+        		<fieldset>
+        			<legend><h2>Download CourseBuilder Files</h2></legend>
+        			
+        			<label>
+        				<span>course.yaml</span>
+        				<h:link styleClass="btn btn-primary">Download</h:link>
+        			</label>
+        			
+        			<label>
+        				<span>course_template.yaml</span>
+        				<h:link styleClass="btn btn-primary">Download</h:link>
+        			</label>
+        			
+        			<label>
+        				<span>data/unit.csv</span>
+        				<h:link styleClass="btn btn-primary">Download</h:link>
+        			</label>
+        			
+        			<label>
+        				<span>data/lesson.csv</span>
+        				<h:link styleClass="btn btn-primary">Download</h:link>
+        			</label>
+        		</fieldset>
+        		
+        		<h:messages style="display: none;"></h:messages>
+        	</form>
+		</ui:define>
+		
+		</ui:composition>
+	</body>
+</html>

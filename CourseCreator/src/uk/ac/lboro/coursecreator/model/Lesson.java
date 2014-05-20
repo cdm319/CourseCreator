@@ -45,6 +45,10 @@ public class Lesson {
 	 */
 	public String getShortLessonNotes() {
 		String notes = lessonNotes;
+		notes = notes.replaceAll("\\</p>", " ");
+		notes = notes.replaceAll("\\</li>", " ");
+		notes = notes.replaceAll("\\<.*?>","");
+		
 		if (notes.length() > 119) {
 			return notes.substring(0, 116) + "...";
 		} else {
@@ -60,8 +64,12 @@ public class Lesson {
 	 */
 	public String getShortLessonObjectives() {
 		String objs = lessonObjectives;
-		if (objs.length() > 79) {
-			return objs.substring(0, 76) + "...";
+		objs = objs.replaceAll("\\</p>", " ");
+		objs = objs.replaceAll("\\</li>", " ");
+		objs = objs.replaceAll("\\<.*?>", "");
+		
+		if (objs.length() > 99) {
+			return objs.substring(0, 96) + "...";
 		} else {
 			return objs;
 		}

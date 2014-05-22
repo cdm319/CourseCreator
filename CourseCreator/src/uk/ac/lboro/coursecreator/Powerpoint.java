@@ -113,7 +113,7 @@ public class Powerpoint {
 			return slide.getTitle();
 		}
 		
-		return null;
+		return "";
 	}
 	
 	/**
@@ -151,7 +151,9 @@ public class Powerpoint {
 			}
 		}
 		
-		return null;
+		results.add("");
+		results.add("");
+		return results;
 	}
 	
 	/**
@@ -183,7 +185,7 @@ public class Powerpoint {
 			}
 		}
 		
-		return null;
+		return "";
 	}
 	
 	/**
@@ -223,7 +225,7 @@ public class Powerpoint {
 			}
 		}
 		
-		return null;
+		return "";
 	}
 	
 	/**
@@ -253,7 +255,7 @@ public class Powerpoint {
 			}
 		}
 		
-		return null;
+		return "";
 	}
 	
 	/**
@@ -284,7 +286,7 @@ public class Powerpoint {
 			}
 		}
 		
-		return null;
+		return "";
 	}
 	
 	/**
@@ -320,7 +322,7 @@ public class Powerpoint {
 			}
 		}
 		
-		return null;
+		return "";
 	}
 	
 	/**
@@ -584,19 +586,18 @@ public class Powerpoint {
 				
 				//set the Release Date to the date on the first slide
 				Date date = getDate(slide);
+				if (null == date) {
+					date = new Date();
+				}
 				unit.setReleaseDate(date);
 				
 				//set the Now Available flag based on the Release Date
 				Date today = new Date();
 				
-				if (date != null) {
-					if (date.after(today)) {
-						unit.setNowAvailable(false);
-					} else {
-						unit.setNowAvailable(true);
-					}
-				} else {
+				if (date.after(today)) {
 					unit.setNowAvailable(false);
+				} else {
+					unit.setNowAvailable(true);
 				}
 			} else {
 				//get the slide title
@@ -626,7 +627,7 @@ public class Powerpoint {
 						
 						//set the Lesson Video ID, if none is found, use the previous Lesson's video
 						String videoId = getYouTubeVideoID(slide);
-						if (null != videoId) {
+						if (null != videoId && !"".equals(videoId)) {
 							lesson.setLessonVideoId(videoId);
 						} else {
 							lesson.setLessonVideoId(lastLesson.getLessonVideoId());

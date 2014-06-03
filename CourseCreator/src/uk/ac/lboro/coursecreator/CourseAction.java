@@ -1,10 +1,13 @@
 package uk.ac.lboro.coursecreator;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -19,7 +22,9 @@ import java.util.regex.Pattern;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
@@ -74,6 +79,139 @@ public class CourseAction implements Serializable {
 		if(course == null) {
 			course = new Course();
 		}
+	}
+	
+	public void exportUnitCsv() {
+		//get the HTTP response to enable file download
+		FacesContext context = FacesContext.getCurrentInstance();
+		HttpServletResponse response = (HttpServletResponse)context.getExternalContext().getResponse();
+		
+		try {
+			//set the response headers
+			response.setContentType("text/csv");
+			response.setHeader("Content-Disposition", "attachment;filename=unit.csv");
+			OutputStream os = response.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			
+			//write the data to the file
+			
+			//write the heading line
+			writer.append("id,type,unit_id,title,release_date,now_available");
+			writer.newLine();
+			
+			//write each unit to a new line
+			for (Unit u : course.getUnits()) {
+				//id
+				writer.append(String.valueOf(u.getUnitId()));
+				writer.append(",");
+				
+				//type
+				writer.append("U");
+				writer.append(",");
+				
+				//unit_id
+				writer.append(String.valueOf(u.getUnitId()));
+				writer.append(",");
+				
+				//title
+				writer.append(u.getTitle());
+				writer.append(",");
+				
+				//release_date
+				SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+				String rd = df.format(u.getReleaseDate());
+				writer.append(rd);
+				writer.append(",");
+				
+				//now_available
+				String na = String.valueOf(u.getNowAvailable());
+				writer.append(na);
+				
+				//newline
+				writer.newLine();
+			}
+			
+			//flush the writer and OutputStream
+			writer.flush();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//tell the servlet that the response is complete
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+	
+	public void exportLessonCsv() {
+		//get the HTTP response to enable file download
+		FacesContext context = FacesContext.getCurrentInstance();
+		HttpServletResponse response = (HttpServletResponse)context.getExternalContext().getResponse();
+		
+		try {
+			//set the response headers
+			response.setContentType("text/csv");
+			response.setHeader("Content-Disposition", "attachment;filename=lesson.csv");
+			OutputStream os = response.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			
+			//write the data to the file
+			
+			//write the heading line
+			writer.append("unit_id,unit_title,lesson_id,lesson_title,lesson_activity,lesson_activity_name,lesson_notes,lesson_video_id,lesson_objectives");
+			writer.newLine();
+			
+			//loop through each unit
+			for (Unit u : course.getUnits()) {
+				//loop through each lesson
+				for (Lesson l : u.getLessons()) {
+					//unit_id
+					writer.append(String.valueOf(u.getUnitId()));
+					writer.append(",");
+					
+					//unit_title
+					writer.append(u.getTitle());
+					writer.append(",");
+					
+					//lesson_id
+					writer.append(String.valueOf(l.getLessonId()));
+					writer.append(",");
+					
+					//lesson_title
+					writer.append(l.getLessonTitle());
+					writer.append(",");
+					
+					//lesson_activity
+					writer.append(",");
+					
+					//lesson_activity_name
+					writer.append(",");
+					
+					//lesson_notes
+					writer.append(l.getLessonNotes());
+					writer.append(",");
+					
+					//lesson_video_id
+					writer.append(l.getLessonVideoId());
+					writer.append(",");
+					
+					//lesson_objectives
+					writer.append(l.getLessonObjectives());
+					
+					//newline
+					writer.newLine();
+				}
+				
+			}
+			
+			//flush the writer and OutputStream
+			writer.flush();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//tell the servlet that the response is complete
+		FacesContext.getCurrentInstance().responseComplete();
 	}
 	
 	/**

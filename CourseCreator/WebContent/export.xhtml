@@ -56,12 +56,12 @@
         			
         			<label>
         				<span>data/unit.csv</span>
-        				<h:link styleClass="btn btn-primary">Download</h:link>
+        				<h:commandLink styleClass="btn btn-primary" action="#{courseAction.exportUnitCsv}">Download</h:commandLink>
         			</label>
         			
         			<label>
         				<span>data/lesson.csv</span>
-        				<h:link styleClass="btn btn-primary">Download</h:link>
+        				<h:commandLink styleClass="btn btn-primary" action="#{courseAction.exportLessonCsv}">Download</h:commandLink>
         			</label>
         		</fieldset>
         		

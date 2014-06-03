@@ -1,73 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.5" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
-  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
-  <class id="1" language="java" name="uk.ac.lboro.coursecreator.model.Course" project="CourseCreator" 
-    file="/CourseCreator/src/uk/ac/lboro/coursecreator/model/Course.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="140" y="562"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="false">  
+  <class id="1" language="java" name="uk.ac.lboro.coursecreator.Powerpoint" project="CourseCreator" 
+    file="/CourseCreator/src/uk/ac/lboro/coursecreator/Powerpoint.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="115" y="414"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="2" language="java" name="uk.ac.lboro.coursecreator.model.Unit" project="CourseCreator" 
-    file="/CourseCreator/src/uk/ac/lboro/coursecreator/model/Unit.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="381" y="561"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="3" language="java" name="uk.ac.lboro.coursecreator.model.Lesson" project="CourseCreator" 
-    file="/CourseCreator/src/uk/ac/lboro/coursecreator/model/Lesson.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="712" y="562"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="uk.ac.lboro.coursecreator.Validation" project="CourseCreator" 
+  <class id="2" language="java" name="uk.ac.lboro.coursecreator.Validation" project="CourseCreator" 
     file="/CourseCreator/src/uk/ac/lboro/coursecreator/Validation.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="617" y="194"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+    <position height="-1" width="-1" x="101" y="48"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="uk.ac.lboro.coursecreator.CourseAction" project="CourseCreator" 
+  <class id="3" language="java" name="uk.ac.lboro.coursecreator.CourseAction" project="CourseCreator" 
     file="/CourseCreator/src/uk/ac/lboro/coursecreator/CourseAction.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="143" y="210"/>    
+    <position height="-1" width="-1" x="367" y="435"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="uk.ac.lboro.coursecreator.model.Course" project="CourseCreator" 
+    file="/CourseCreator/src/uk/ac/lboro/coursecreator/model/Course.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1118" y="252"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="6">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="7" name="lessons"/>      
-      <multiplicity id="8" minimum="0" maximum="2147483647"/>    
+  <class id="5" language="java" name="uk.ac.lboro.coursecreator.model.Lesson" project="CourseCreator" 
+    file="/CourseCreator/src/uk/ac/lboro/coursecreator/model/Lesson.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="726" y="791"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="uk.ac.lboro.coursecreator.model.Unit" project="CourseCreator" 
+    file="/CourseCreator/src/uk/ac/lboro/coursecreator/model/Unit.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="726" y="352"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="7">    
+    <bendpoint x="456" y="72"/>    
+    <bendpoint x="774" y="72"/>    
+    <bendpoint x="960" y="74"/>    
+    <bendpoint x="1012" y="72"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="8" name="course">        
+        <position height="18" width="45" x="956" y="46"/>      
+      </attribute>      
+      <multiplicity id="9" minimum="0" maximum="1">        
+        <position height="16" width="25" x="972" y="79"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="9">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="10" name="units"/>      
-      <multiplicity id="11" minimum="0" maximum="2147483647"/>    
+  <association id="10">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="11" name="units">        
+        <position height="18" width="34" x="836" y="294"/>      
+      </attribute>      
+      <multiplicity id="12" minimum="0" maximum="2147483647">        
+        <position height="16" width="23" x="838" y="329"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="12">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="13" name="courseStructure"/>      
-      <multiplicity id="14" minimum="0" maximum="1"/>    
+  <association id="13">    
+    <bendpoint x="454" y="258"/>    
+    <bendpoint x="627" y="262"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="14" name="currentUnit"/>      
+      <multiplicity id="15" minimum="0" maximum="1">        
+        <position height="16" width="25" x="590" y="267"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="16">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="17" name="lessons"/>      
+      <multiplicity id="18" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="19">    
+    <bendpoint x="457" y="560"/>    
+    <bendpoint x="538" y="560"/>    
+    <bendpoint x="536" y="787"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="20" name="tempLesson">        
+        <position height="18" width="75" x="541" y="760"/>      
+      </attribute>      
+      <multiplicity id="21" minimum="0" maximum="1">        
+        <position height="16" width="25" x="588" y="796"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="22">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="23" name="tempUnit">        
+        <position height="18" width="57" x="559" y="354"/>      
+      </attribute>      
+      <multiplicity id="24" minimum="0" maximum="1">        
+        <position height="16" width="25" x="590" y="386"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

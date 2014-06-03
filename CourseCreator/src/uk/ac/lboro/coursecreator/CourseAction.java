@@ -123,9 +123,13 @@ public class CourseAction implements Serializable {
 				writer.append(rd);
 				writer.append(",");
 				
-				//now_available
+				//now_available - ensure first character is capital, return False as default
 				String na = String.valueOf(u.getNowAvailable());
-				writer.append(na);
+				String now_available = "False";
+				if (!"".equals(na)) {
+					now_available = na.substring(0, 1).toUpperCase() + na.substring(1);
+				}
+				writer.append(now_available);
 				
 				//newline
 				writer.newLine();
@@ -186,16 +190,24 @@ public class CourseAction implements Serializable {
 					//lesson_activity_name
 					writer.append(",");
 					
-					//lesson_notes
-					writer.append(l.getLessonNotes());
+					//lesson_notes - remove any line breaks, replace double quotes, wrap in double quotes
+					String notes = l.getLessonNotes();
+					notes = notes.replaceAll("(\\r|\\n)", "");
+					notes = notes.replaceAll("\"", "'");
+					notes = "\"" + notes + "\"";
+					writer.append(notes);
 					writer.append(",");
 					
 					//lesson_video_id
 					writer.append(l.getLessonVideoId());
 					writer.append(",");
 					
-					//lesson_objectives
-					writer.append(l.getLessonObjectives());
+					//lesson_objectives - remove any line breaks, replace double quotes, wrap in double quotes
+					String objs = l.getLessonObjectives();
+					objs = objs.replaceAll("(\\r|\\n)", "");
+					objs = objs.replaceAll("\"", "'");
+					objs = "\"" + objs + "\"";
+					writer.append(objs);
 					
 					//newline
 					writer.newLine();

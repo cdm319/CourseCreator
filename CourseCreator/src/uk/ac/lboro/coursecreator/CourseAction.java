@@ -81,6 +81,133 @@ public class CourseAction implements Serializable {
 		}
 	}
 	
+	public void exportCourseTemplateYaml() {
+		//get the HTTP response to enable file download
+		FacesContext context = FacesContext.getCurrentInstance();
+		HttpServletResponse response = (HttpServletResponse)context.getExternalContext().getResponse();
+		
+		try {
+			//set the response headers
+			response.setContentType("text/yaml");
+			response.setHeader("Content-Disposition", "attachment;filename=course_template.yaml");
+			OutputStream os = response.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			
+			//write the data to the file
+			writer.append("institution:"); 															writer.newLine();
+			writer.append("  name: '" + course.getInstitutionName() + "'");							writer.newLine();
+			writer.append("  url: '" + course.getInstitutionURL() + "'");							writer.newLine();
+			writer.append("  logo:");																writer.newLine();
+			writer.append("    url: 'data:image/png;base64," + course.getInstitutionLogo() + "'");	writer.newLine();
+			writer.append("    alt_text: " + course.getInstitutionName());							writer.newLine();
+			writer.newLine();
+			
+			writer.append("base:");																	writer.newLine();
+			writer.append("  before_head_tag_ends: ''");											writer.newLine();
+			writer.append("  after_body_tag_begins: ''");											writer.newLine();
+			writer.append("  after_navbar_begins: ''");												writer.newLine();
+			writer.append("  before_navbar_ends: '<script src=\"/modules/search/assets/search.js\"></script><link rel=\"stylesheet\" type=\"text/css\" href=\"/modules/search/assets/search.css\" /><li class=\"gcb-pull-right\"><form class=\"gcb-search-form\" action=\"search\" method=\"get\"><input class=\"gcb-search-box\" name=\"query\" type=\"text\" aria-label=\"Enter a search term\"><input value=\"Search\" class=\"gcb-button gcb-search-button\" type=\"submit\"></form></li>'"); writer.newLine();
+			writer.append("  after_top_content_ends: ''");											writer.newLine();
+			writer.append("  after_main_content_ends: ''");											writer.newLine();
+			writer.append("  before_body_tag_ends: ''");											writer.newLine();
+			writer.append("  show_gplus_button: True");												writer.newLine();
+			writer.append("  nav_header: '" + course.getTitle() + "'");								writer.newLine();
+			writer.append("  privacy_terms_url: 'PRIVACY_POLICY_AND_TERMS_OF_SERVICE'");			writer.newLine();
+			writer.append("  locale: 'en_GB'");														writer.newLine();
+			
+			//flush the writer and OutputStream
+			writer.flush();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//tell the servlet that the response is complete
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+	
+	public void exportCourseYaml() {
+		//get the HTTP response to enable file download
+		FacesContext context = FacesContext.getCurrentInstance();
+		HttpServletResponse response = (HttpServletResponse)context.getExternalContext().getResponse();
+		
+		try {
+			//set the response headers
+			response.setContentType("text/yaml");
+			response.setHeader("Content-Disposition", "attachment;filename=course.yaml");
+			OutputStream os = response.getOutputStream();
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			
+			//get start date string
+			SimpleDateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
+			String sd = df.format(course.getStartDate());
+			
+			//write the data to the file
+			writer.append("course:"); 																writer.newLine();
+			writer.append("  admin_user_emails: '[" + course.getAdministratorEmail() + "]'"); 		writer.newLine();
+			writer.append("  title: '" + course.getTitle() + "'"); 									writer.newLine();
+			writer.append("  blurb: |"); 															writer.newLine();
+			writer.append("    " + course.getBlurb()); 												writer.newLine();
+			writer.append("  instructor_details: '" + course.getAdministratorName() + "'"); 		writer.newLine();
+			writer.append("  main_video:"); 														writer.newLine();
+			writer.append("    url: https://www.youtube.com/embed/" + course.getIntroVideoId()); 	writer.newLine();
+			writer.append("  main_image:"); 														writer.newLine();
+			writer.append("    url:"); 																writer.newLine();
+			writer.append("    alt_text:"); 														writer.newLine();
+			writer.append("  start_date: '" + sd + "'"); 											writer.newLine();
+			writer.append("  forum_email:");														writer.newLine();
+			writer.append("  forum_url: " + course.getForumURL()); 									writer.newLine();
+			writer.append("  forum_embed_url:"); 													writer.newLine();
+			writer.append("  announcement_list_email:"); 											writer.newLine();
+			writer.append("  announcement_list_url:"); 												writer.newLine();
+			writer.append("  locale: 'en_GB'"); 													writer.newLine();
+			writer.append("  now_available: true");													writer.newLine();
+			writer.append("  browsable: true"); 													writer.newLine();
+			writer.append("  google_analytics_id: ''"); 											writer.newLine();
+			writer.append("  google_tag_manager_id: ''"); 											writer.newLine();
+			writer.newLine();
+			
+			writer.append("preview:"); 																writer.newLine();
+			writer.append("  after_top_content_ends: ''"); 											writer.newLine();
+			writer.append("  after_main_content_ends: ''"); 										writer.newLine();
+			writer.newLine();
+			
+			writer.append("reg_form:"); 															writer.newLine();
+			writer.append("  header_text: |"); 														writer.newLine();
+			writer.append("    Welcome!  Please answer the following question, and you will be enrolled in the course."); writer.newLine();
+			writer.append("  additional_registration_fields: ''");									writer.newLine();
+			writer.append("  can_register: True");													writer.newLine();
+			writer.newLine();
+			
+			writer.append("assessment_confirmations:"); 											writer.newLine();
+			writer.append("  result_text:");														writer.newLine();
+			writer.append("    pass: |");															writer.newLine();
+			writer.append("      Based on your overall course score of %s%%, you have passed the course."); writer.newLine();
+			writer.append("      Congratulations!");												writer.newLine();
+			writer.append("    fail: |");															writer.newLine();
+			writer.append("      Unfortunately, based on your overall course score of %s%%, you have not passed the course."); writer.newLine();
+			writer.append("      We encourage you to review the lessons noted and to attempt the assessment again before it closes."); writer.newLine();
+			writer.append("      Certificate or not, we hope you enjoyed taking the course and learned new skills!"); writer.newLine();
+			writer.newLine();
+			
+			writer.append("unit:");																	writer.newLine();
+			writer.append("  after_leftnav_begins: ''");											writer.newLine();
+			writer.append("  before_leftnav_ends: ''");												writer.newLine();
+			writer.append("  after_content_begins: ''");											writer.newLine();
+			writer.append("  before_content_ends: ''");												writer.newLine();
+			writer.append("  hide_lesson_navigation_buttons: False");								writer.newLine();
+			
+			//flush the writer and OutputStream
+			writer.flush();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//tell the servlet that the response is complete
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+	
 	public void exportUnitCsv() {
 		//get the HTTP response to enable file download
 		FacesContext context = FacesContext.getCurrentInstance();

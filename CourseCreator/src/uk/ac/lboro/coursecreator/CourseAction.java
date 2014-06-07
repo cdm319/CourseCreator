@@ -93,12 +93,18 @@ public class CourseAction implements Serializable {
 			OutputStream os = response.getOutputStream();
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 			
+			//set the base64 value for the image, or blank string if no image selected
+			String instLogo = course.getInstitutionLogo();
+			if (!"".equals(instLogo)) {
+				instLogo = "data:image/png;base64," + instLogo;
+			}
+			
 			//write the data to the file
 			writer.append("institution:"); 															writer.newLine();
 			writer.append("  name: '" + course.getInstitutionName() + "'");							writer.newLine();
 			writer.append("  url: '" + course.getInstitutionURL() + "'");							writer.newLine();
 			writer.append("  logo:");																writer.newLine();
-			writer.append("    url: 'data:image/png;base64," + course.getInstitutionLogo() + "'");	writer.newLine();
+			writer.append("    url: '" + instLogo + "'");	writer.newLine();
 			writer.append("    alt_text: " + course.getInstitutionName());							writer.newLine();
 			writer.newLine();
 			

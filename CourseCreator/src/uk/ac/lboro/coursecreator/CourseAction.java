@@ -96,7 +96,7 @@ public class CourseAction implements Serializable {
 			//set the base64 value for the image, or blank string if no image selected
 			String instLogo = course.getInstitutionLogo();
 			if (!"".equals(instLogo)) {
-				instLogo = "data:image/png;base64," + instLogo;
+				instLogo = "'data:image/png;base64," + instLogo + "'";
 			}
 			
 			//write the data to the file
@@ -104,7 +104,7 @@ public class CourseAction implements Serializable {
 			writer.append("  name: '" + course.getInstitutionName() + "'");							writer.newLine();
 			writer.append("  url: '" + course.getInstitutionURL() + "'");							writer.newLine();
 			writer.append("  logo:");																writer.newLine();
-			writer.append("    url: '" + instLogo + "'");	writer.newLine();
+			writer.append("    url: " + instLogo);													writer.newLine();
 			writer.append("    alt_text: " + course.getInstitutionName());							writer.newLine();
 			writer.newLine();
 			

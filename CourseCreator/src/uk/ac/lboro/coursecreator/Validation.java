@@ -87,6 +87,10 @@ public class Validation {
 		List<String> fileTypes = new ArrayList<String>();
 		fileTypes.add("application/vnd.openxmlformats-officedocument.presentationml.presentation");
 		
+		if (null == tempFile) {
+			//no file
+			throw new ValidatorException(new FacesMessage("Please upload a valid .pptx file."));
+		}
 		if (tempFile.getSize() < 2) {
 			//smaller than 2 bytes
 			throw new ValidatorException(new FacesMessage("Please upload a valid .pptx file."));
